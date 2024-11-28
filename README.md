@@ -25,6 +25,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 デプロイ：
 https://enterprisevue.dev/blog/how-to-deploy-a-vue-application-to-heroku/
 
+git push heroku master
+
 HerokuでVueアプリをデプロイするためにnpm run startを使えるようにするには、package.jsonの"scripts"セクションに"start"スクリプトを追加します。
 
 修正後のpackage.jsonは以下のようになります：
