@@ -1,7 +1,9 @@
 <template>
   <header class="header">
+    <router-link to="/" class="logo-link">
+      <img src="/src/assets/logo.png" alt="Logo" class="logo" />
+    </router-link>
     <nav>
-      <router-link to="/">Home</router-link>
       <router-link v-if="!isLoggedIn" to="/login">Login</router-link>
       <a v-else @click="logout" style="cursor: pointer;">Logout</a>
       <!-- 管理者の場合にのみ表示されるリンク -->
@@ -60,24 +62,40 @@ export default {
 </script>
 
 <style scoped>
+:root {
+  font-size: 16px; /* 基準フォントサイズ */
+}
+
 .header {
-  padding: 20px;
-  background-color: #42b983;
-  color: white;
+  padding: clamp(0.5rem, 2vw, 1.5rem); /* モバイルからデスクトップに対応したパディング */
+  background-color: white; /* ヘッダーを白に変更 */
+  color: black; /* テキストを黒に変更 */
   text-align: center;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 下の境界に影を追加 */
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: clamp(2rem, 5vw, 3rem); /* ロゴの高さをレスポンシブに調整 */
+  width: auto;
 }
 
 nav {
   display: flex;
-  gap: 20px;
+  gap: clamp(0.5rem, 1.5vw, 1rem); /* ナビゲーションリンク間の隙間を標準的なサイズに調整 */
 }
 
 a {
-  color: white;
+  color: black; /* リンクの色を黒に変更 */
   text-decoration: none;
+  font-size: clamp(1rem, 1vw, 1.25rem); /* リンクのフォントサイズを標準化 */
   font-weight: bold;
 }
 
@@ -88,6 +106,6 @@ a:hover {
 /* 右端にユーザー情報を表示 */
 .user-info {
   text-align: right;
-  font-size: 14px;
+  font-size: clamp(0.875rem, 1vw, 1rem); /* ユーザー情報のフォントサイズを標準化 */
 }
 </style>
