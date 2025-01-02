@@ -1,101 +1,86 @@
 <template>
   <header class="header">
-    <router-link to="/" class="logo-link">
-      <img src="/src/assets/logo.png" alt="Logo" class="logo" />
-    </router-link>
+    <LogoComponent />
     <nav>
-      <router-link v-if="!isLoggedIn" to="/login">Login</router-link>
-      <a v-else @click="logout" style="cursor: pointer;">Logout</a>
-      <!-- 管理者の場合にのみ表示されるリンク -->
-      <router-link v-if="isLoggedIn && userRole === 'ROLE_ADMIN'" to="/dashboard" style="cursor: pointer;">Admin Dashboard</router-link>
+      <router-link v-if="isLoggedIn && userRole === 'ROLE_ADMIN'" to="/dashboard" style="cursor: pointer;">Dashboard</router-link>
     </nav>
 
-    <!-- 右端にWelcome メッセージとユーザー情報を表示 -->
-    <div v-if="isLoggedIn" class="user-info">
-      <p>Welcome {{ userEmail }} ({{ userRole }})</p>
+    <div class="user-info">
+      <button v-if="!isLoggedIn" class="login-button" @click="$router.push('/login')">Login</button>
+      <button v-else class="logout-button" @click="logout">Logout</button>
     </div>
   </header>
 </template>
 
 <script>
+import LogoComponent from "@/components/LogoComponent.vue";
+
 export default {
-  name: 'HeaderComponent',
+  name: "HeaderComponent",
+  components: {
+    LogoComponent,
+  },
   data() {
     return {
       isLoggedIn: false,
-      userEmail: '',  // ユーザーのメールアドレス
-      userRole: ''    // ユーザーの役職
+      userEmail: "",
+      userRole: "",
     };
   },
   mounted() {
-    // マウント時にトークンをチェック
-    this.isLoggedIn = !!localStorage.getItem('accessToken');
-
-    // ユーザー情報をlocalStorageから取得
-    this.userEmail = localStorage.getItem('userEmail') || '';
-    this.userRole = localStorage.getItem('userRole') || '';
-
-    // カスタムイベントのリスナーを追加
-    window.addEventListener('authChanged', this.updateAuthStatus);
+    this.isLoggedIn = !!localStorage.getItem("accessToken");
+    this.userEmail = localStorage.getItem("userEmail") || "";
+    this.userRole = localStorage.getItem("userRole") || "";
+    window.addEventListener("authChanged", this.updateAuthStatus);
   },
   beforeUnmount() {
-    // コンポーネントがアンマウントされる際にイベントリスナーを削除
-    window.removeEventListener('authChanged', this.updateAuthStatus);
+    window.removeEventListener("authChanged", this.updateAuthStatus);
   },
   methods: {
     logout() {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('userEmail');  // メールアドレスもログアウト時に削除
-      localStorage.removeItem('userRole');   // ロールもログアウト時に削除
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("userRole");
       this.isLoggedIn = false;
-      window.dispatchEvent(new Event('authChanged')); // ログアウト後にカスタムイベントを発火
-      this.$router.push('/'); // ログアウト後にホームページにリダイレクト
+      window.dispatchEvent(new Event("authChanged"));
+      this.$router.push("/");
     },
     updateAuthStatus() {
-      this.isLoggedIn = !!localStorage.getItem('accessToken');
-      // ログイン状態が変わったときに、メールアドレスとロールを更新
-      this.userEmail = localStorage.getItem('userEmail') || '';
-      this.userRole = localStorage.getItem('userRole') || '';
-    }
-  }
+      this.isLoggedIn = !!localStorage.getItem("accessToken");
+      this.userEmail = localStorage.getItem("userEmail") || "";
+      this.userRole = localStorage.getItem("userRole") || "";
+    },
+  },
 };
 </script>
 
 <style scoped>
 :root {
-  font-size: 16px; /* 基準フォントサイズ */
+  font-size: 18px; /* 全体的に文字を大きく設定 */
 }
 
 .header {
-  padding: clamp(0.5rem, 2vw, 1.5rem); /* モバイルからデスクトップに対応したパディング */
-  background-color: white; /* ヘッダーを白に変更 */
-  color: black; /* テキストを黒に変更 */
+  padding: clamp(0.5rem, 2vw, 1.5rem);
+  background-color: white;
+  color: black;
   text-align: center;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 下の境界に影を追加 */
-}
-
-.logo-link {
-  display: flex;
-  align-items: center;
-}
-
-.logo {
-  height: clamp(2rem, 5vw, 3rem); /* ロゴの高さをレスポンシブに調整 */
-  width: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 nav {
+  margin-top: auto;
   display: flex;
-  gap: clamp(0.5rem, 1.5vw, 1rem); /* ナビゲーションリンク間の隙間を標準的なサイズに調整 */
+  gap: clamp(0.5rem, 1.5vw, 1rem);
+  align-items: center;
 }
 
 a {
-  color: black; /* リンクの色を黒に変更 */
+  color: black;
   text-decoration: none;
-  font-size: clamp(1rem, 1vw, 1.25rem); /* リンクのフォントサイズを標準化 */
+  font-size: clamp(1.125rem, 1.2vw, 1.5rem); /* 少し大きめのフォントサイズ */
   font-weight: bold;
 }
 
@@ -103,9 +88,42 @@ a:hover {
   text-decoration: underline;
 }
 
+/* ログインボタンのスタイル */
+.login-button {
+  background-color: #d63030;
+  color: white; /* ボタン上の文字を白に設定 */
+  border: none;
+  padding: 0.75rem 1.25rem; /* ボタンサイズを大きく */
+  font-size: clamp(1.125rem, 1.2vw, 1.5rem);
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #b52a2a;
+}
+
+.logout-button {
+  background-color: #4caf50;
+  color: white; /* ボタン上の文字を白に設定 */
+  border: none;
+  padding: 0.75rem 1.25rem; /* ボタンサイズを大きく */
+  font-size: clamp(1.125rem, 1.2vw, 1.5rem);
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #45a049; 
+}
+
 /* 右端にユーザー情報を表示 */
 .user-info {
   text-align: right;
-  font-size: clamp(0.875rem, 1vw, 1rem); /* ユーザー情報のフォントサイズを標準化 */
+  font-size: clamp(1rem, 1.1vw, 1.25rem); /* ユーザー情報も大きめに設定 */
 }
 </style>
