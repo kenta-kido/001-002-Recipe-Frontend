@@ -1,66 +1,42 @@
 <template>
-  <v-container>
-    <v-card>
-      <v-card-title>Create a New Recipe</v-card-title>
-      <v-card-text>
-        <v-form @submit.prevent="submitRecipe">
-          <!-- レシピタイトル -->
-          <v-text-field
-            v-model="recipe.title"
-            label="Recipe Title"
+  <div>
+    <h2>Create a New Recipe</h2>
+    <form @submit.prevent="submitRecipe">
+      <div>
+        <label for="title">Recipe Title:</label>
+        <input type="text" id="title" v-model="recipe.title" required />
+      </div>
+
+      <div>
+        <h3>Descriptions</h3>
+        <div v-for="(description, index) in descriptions" :key="index">
+          <label :for="'description-' + index">Step {{ index + 1 }}:</label>
+          <input
+            type="text"
+            :id="'description-' + index"
+            v-model="description.text"
+            placeholder="Enter description"
             required
-            outlined
-          ></v-text-field>
-
-          <!-- 手順セクション -->
-          <v-divider></v-divider>
-          <h3>Descriptions</h3>
-          <div v-for="(description, index) in descriptions" :key="index">
-            <v-text-field
-              v-model="description.text"
-              :label="'Step ' + (index + 1)"
-              placeholder="Enter description"
-              required
-              outlined
-            ></v-text-field>
-
-            <!-- 写真セクション -->
+          />
+          <div>
             <h4>Photos for Step {{ index + 1 }}</h4>
             <div v-for="(photo, photoIndex) in description.photos" :key="photoIndex">
-              <v-file-input
-                accept="image/*"
+              <input
+                type="file"
                 @change="onPhotoChange($event, index, photoIndex)"
-                outlined
-                label="Upload Photo"
-              ></v-file-input>
-              <v-btn
-                text
-                color="error"
-                @click="removePhoto(index, photoIndex)"
-              >
-                Remove Photo
-              </v-btn>
+              />
+              <button type="button" @click="removePhoto(index, photoIndex)">Remove Photo</button>
             </div>
-            <v-btn text @click="addPhoto(index)">Add Photo</v-btn>
-            <v-btn
-              text
-              color="error"
-              @click="removeDescription(index)"
-            >
-              Remove Step
-            </v-btn>
-            <v-divider></v-divider>
+            <button type="button" @click="addPhoto(index)">Add Photo</button>
           </div>
+          <button type="button" @click="removeDescription(index)">Remove Step</button>
+        </div>
+        <button type="button" @click="addDescription">Add Step</button>
+      </div>
 
-          <!-- 手順追加 -->
-          <v-btn text @click="addDescription">Add Step</v-btn>
-
-          <!-- 送信ボタン -->
-          <v-btn color="primary" type="submit">Submit Recipe</v-btn>
-        </v-form>
-      </v-card-text>
-    </v-card>
-  </v-container>
+      <button type="submit">Submit Recipe</button>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -150,5 +126,5 @@ export default {
 </script>
 
 <style scoped>
-/* Vuetifyのデフォルトスタイルを活用するため追加のCSSは不要 */
+/* 同じスタイルを適用 */
 </style>
