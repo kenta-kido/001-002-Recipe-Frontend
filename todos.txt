@@ -1,0 +1,9 @@
+1. Photoidをrecipeとdescriptionのエンティティから参照する形にする
+2. Zutatenテーブルを作る
+3. カテゴリテーブルを作る（日本食に特化）
+4. recipeテーブルにveganとvegetarian, glutenfreeを追加
+5. photoを小さくした後、バイナリに変換する機能
+6. 
+7. 
+8. 
+9. 
