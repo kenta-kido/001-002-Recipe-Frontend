@@ -1,10 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "../views/HomePage.vue";
 import TestPage from "../views/TestPage.vue";
+import BarcodeTestPage from "../views/BarcodeTestPage.vue";
 import LoginPage from "../views/LoginPage.vue";
 import AdminPage from "../views/admin/AdminPage.vue";
 
 import RecipeUserPage from "../views/recipe/RecipeUserPage.vue"; // 新規追加
+import RecipeDetail from "../views/recipe/RecipeDetail.vue";
 
 import DashboardPage from "../views/DashboardPage.vue";
 import UserPage from "../views/UserPage.vue";
@@ -14,6 +16,7 @@ import DashBoardUserEdit from "../views/DashBoardUserEdit.vue"; // 新規追加
 const routes = [
   { path: "/", component: HomePage },
   { path: "/test", component: TestPage },
+  { path: "/barcodetest", component: BarcodeTestPage },
   { path: "/login", component: LoginPage },
   { path: "/admin", component: AdminPage, meta: { requiresAuth: true, role: "ROLE_ADMIN" } },
   // { path: "/admin", component: AdminPage},
@@ -23,7 +26,8 @@ const routes = [
   { path: "/dashboard/user-edit/:id", component: DashBoardUserEdit, meta: { requiresAuth: true, role: "ROLE_ADMIN" } }, // 新しいルート
   
   { path: "/recipe", component: RecipeUserPage, meta: { requiresAuth: true, role: "ROLE_USER" } }, // 新しいルート
-
+  { path: "/recipes/:id", component: RecipeDetail, props: true }, // 新規追加
+  
 ];
 
 const router = createRouter({
