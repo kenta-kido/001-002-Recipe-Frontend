@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "../views/HomePage.vue";
 import TestPage from "../views/TestPage.vue";
 import BarcodeTestPage from "../views/BarcodeTestPage.vue";
+import BarcodescanTestPage from "../views/BarcodescanTestPage.vue";
 import LoginPage from "../views/LoginPage.vue";
 import AdminPage from "../views/admin/AdminPage.vue";
 
@@ -17,6 +18,7 @@ const routes = [
   { path: "/", component: HomePage },
   { path: "/test", component: TestPage },
   { path: "/barcodetest", component: BarcodeTestPage },
+  { path: "/barcodescantest", component: BarcodescanTestPage },
   { path: "/login", component: LoginPage },
   { path: "/admin", component: AdminPage, meta: { requiresAuth: true, role: "ROLE_ADMIN" } },
   // { path: "/admin", component: AdminPage},
