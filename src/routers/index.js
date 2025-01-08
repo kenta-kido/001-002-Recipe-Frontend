@@ -14,9 +14,13 @@ import UserPage from "../views/UserPage.vue";
 import DashBoardUserCreate from "../views/DashBoardUserCreate.vue"; // 新規追加
 import DashBoardUserEdit from "../views/DashBoardUserEdit.vue"; // 新規追加
 
+import HeicToBase64 from "../views/functiontest/HeicToBase64.vue";
+
 const routes = [
   { path: "/", component: HomePage },
   { path: "/test", component: TestPage },
+  { path: "/test/heictobase64", component: HeicToBase64, props: true }, // 新規追加
+  
   { path: "/barcodetest", component: BarcodeTestPage },
   { path: "/barcodescantest", component: BarcodescanTestPage },
   { path: "/login", component: LoginPage },
@@ -29,7 +33,7 @@ const routes = [
   
   { path: "/recipe", component: RecipeUserPage, meta: { requiresAuth: true, role: "ROLE_USER" } }, // 新しいルート
   { path: "/recipes/:id", component: RecipeDetail, props: true }, // 新規追加
-  
+
 ];
 
 const router = createRouter({
