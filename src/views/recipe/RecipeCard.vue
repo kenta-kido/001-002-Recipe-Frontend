@@ -3,8 +3,9 @@
     class="border rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition duration-300"
   >
     <img
+      v-if="photoUrl"
       class="w-full h-48 object-cover"
-      :src="getPhotoUrl(recipe.recipeId)"
+      :src="photoUrl"
       alt="Recipe Image"
     />
     <div class="p-4">
@@ -19,8 +20,9 @@
     </div>
   </div>
 </template>
-
 <script>
+import axios from "axios";
+
 export default {
   name: "RecipeCard",
   props: {
@@ -29,10 +31,34 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      photoUrl: "", // Base64形式の画像データ
+    };
+  },
   methods: {
-    getPhotoUrl(recipeId) {
-      return `/api/recipes/${recipeId}/photo`;
+    async fetchPhoto(recipeId) {
+      try {
+        // バックエンドからのリクエストを実行
+        const response = await axios.get(`http://localhost:8080/recipes/${recipeId}/photo`, {
+          responseType: 'text', // Base64文字列をそのまま取得する
+        });
+
+        // 取得したデータを直接photoUrlにセット
+        this.photoUrl = response.data; 
+
+        console.log(`Generated Photo URL: ${this.photoUrl}`);
+      } catch (error) {
+        console.error("Error fetching photo for recipe ID:", recipeId, error);
+      }
     },
+  },
+  mounted() {
+    if (this.recipe && this.recipe.recipeId) {
+      this.fetchPhoto(this.recipe.recipeId);
+    } else {
+      console.error("Recipe ID is missing.");
+    }
   },
 };
 </script>
