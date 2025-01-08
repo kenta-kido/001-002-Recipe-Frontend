@@ -1,40 +1,62 @@
 <template>
-  <div>
-    <h2>Create a New Recipe</h2>
-    <form @submit.prevent="submitRecipe">
+  <div class="container mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4">Create a New Recipe</h1>
+    <form @submit.prevent="submitRecipe" class="space-y-4">
+      <!-- レシピのタイトル -->
       <div>
-        <label for="title">Recipe Title:</label>
-        <input type="text" id="title" v-model="recipe.title" required />
+        <label for="title" class="block font-medium">Recipe Title:</label>
+        <input
+          type="text"
+          id="title"
+          v-model="recipe.title"
+          class="block w-full border rounded px-3 py-2 mt-1"
+          required
+        />
       </div>
 
+      <!-- メイン画像 -->
       <div>
-        <h3>Descriptions</h3>
-        <div v-for="(description, index) in descriptions" :key="index">
-          <label :for="'description-' + index">Step {{ index + 1 }}:</label>
-          <input
-            type="text"
-            :id="'description-' + index"
-            v-model="description.text"
-            placeholder="Enter description"
-            required
-          />
+        <label class="block font-medium">Main Image:</label>
+        <input
+          type="file"
+          @change="onMainPhotoChange"
+          class="block w-full border rounded px-3 py-2 mt-1"
+        />
+      </div>
+
+      <!-- 手順と写真 -->
+      <div>
+        <h2 class="text-xl font-bold mb-2">Steps</h2>
+        <div v-for="(description, index) in descriptions" :key="index" class="space-y-2 border p-4 rounded">
           <div>
-            <h4>Photos for Step {{ index + 1 }}</h4>
-            <div v-for="(photo, photoIndex) in description.photos" :key="photoIndex">
-              <input
-                type="file"
-                @change="onPhotoChange($event, index, photoIndex)"
-              />
-              <button type="button" @click="removePhoto(index, photoIndex)">Remove Photo</button>
-            </div>
-            <button type="button" @click="addPhoto(index)">Add Photo</button>
+            <label :for="'description-' + index" class="block font-medium">Step {{ index + 1 }}:</label>
+            <input
+              type="text"
+              :id="'description-' + index"
+              v-model="description.text"
+              class="block w-full border rounded px-3 py-2 mt-1"
+              placeholder="Enter description"
+              required
+            />
           </div>
-          <button type="button" @click="removeDescription(index)">Remove Step</button>
+
+          <!-- 手順ごとの写真 -->
+          <div>
+            <label class="block font-medium">Step Photos:</label>
+            <div v-for="(photo, photoIndex) in description.photos" :key="photoIndex" class="space-y-2">
+              <input type="file" @change="onStepPhotoChange($event, index, photoIndex)" />
+              <button type="button" @click="removePhoto(index, photoIndex)" class="text-red-600">Remove Photo</button>
+            </div>
+            <button type="button" @click="addPhoto(index)" class="text-blue-600">Add Photo</button>
+          </div>
+
+          <button type="button" @click="removeDescription(index)" class="text-red-600">Remove Step</button>
         </div>
-        <button type="button" @click="addDescription">Add Step</button>
+        <button type="button" @click="addDescription" class="text-blue-600">Add Step</button>
       </div>
 
-      <button type="submit">Submit Recipe</button>
+      <!-- 送信ボタン -->
+      <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Submit Recipe</button>
     </form>
   </div>
 </template>
@@ -43,14 +65,14 @@
 import api from "@/api/axios";
 
 export default {
-  name: "RecipeUserPage",
   data() {
     return {
       recipe: {
         title: "",
+        mainPhoto: null,
       },
       descriptions: [
-        { text: "", photos: [] }, // 各手順ごとに写真の配列を持つ
+        { text: "", photos: [] },
       ],
     };
   },
@@ -67,23 +89,38 @@ export default {
     removePhoto(descriptionIndex, photoIndex) {
       this.descriptions[descriptionIndex].photos.splice(photoIndex, 1);
     },
-    onPhotoChange(event, descriptionIndex, photoIndex) {
+    onMainPhotoChange(event) {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          this.descriptions[descriptionIndex].photos.splice(photoIndex, 1, e.target.result);
+          this.recipe.mainPhoto = e.target.result.split(",")[1];
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+    onStepPhotoChange(event, descriptionIndex, photoIndex) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.descriptions[descriptionIndex].photos.splice(photoIndex, 1, e.target.result.split(",")[1]);
         };
         reader.readAsDataURL(file);
       }
     },
     async submitRecipe() {
       try {
-        // レシピの登録
-        const recipeResponse = await api.post(
-          "/recipes",
-          { title: this.recipe.title },
-          { headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` } }
+        // レシピを作成
+        const recipeResponse = await api.post("/recipes", {
+          title: this.recipe.title,
+          photo: { binaryPhoto: this.recipe.mainPhoto },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
         );
 
         const recipeId = recipeResponse.data.recipeId;
@@ -92,29 +129,28 @@ export default {
         for (let i = 0; i < this.descriptions.length; i++) {
           const description = this.descriptions[i];
 
-          // 手順の登録
-          const descriptionResponse = await api.post(
-            `/recipes/${recipeId}/descriptions`,
-            { description: description.text, sequence: i + 1 },
-            { headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` } }
-          );
+          const descriptionResponse = await api.post(`/recipes/${recipeId}/descriptions`, {
+            description: description.text,
+            sequence: i + 1,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          });
 
           const descriptionId = descriptionResponse.data.descriptionId;
 
-          // 写真の登録
           for (let j = 0; j < description.photos.length; j++) {
             const photo = description.photos[j];
-            if (photo) {
-              await api.post(
-                `/descriptions/${descriptionId}/photos`,
-                { binaryPhoto: photo, sequence: j + 1 },
-                { headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` } }
-              );
-            }
+            await api.post(`/descriptions/${descriptionId}/photos`, {
+              binaryPhoto: photo,
+              sequence: j + 1,
+            });
           }
         }
 
-        alert("Recipe successfully created!");
+        alert("Recipe created successfully!");
         this.$router.push("/user");
       } catch (error) {
         console.error("Error submitting recipe:", error);
@@ -126,5 +162,5 @@ export default {
 </script>
 
 <style scoped>
-/* 同じスタイルを適用 */
+/* Tailwind CSS を使うためカスタムスタイルは最小限に */
 </style>
