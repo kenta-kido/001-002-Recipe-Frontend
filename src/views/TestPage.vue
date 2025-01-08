@@ -1,7 +1,22 @@
 <template>
   <div class="test">
     <h1>テスト</h1>
-    
+    <!-- 画像アップロードセクション -->
+    <div class="upload-section">
+      <input type="file" @change="handleFileUpload" />
+      <button @click="uploadImage" class="upload-button" :disabled="!selectedFile">画像アップロード</button>
+    </div>
+
+    <!-- Base64テキスト表示 -->
+    <div v-if="base64Image" class="base64-display">
+      <h2>Base64エンコード結果</h2>
+      <textarea
+        readonly
+        class="base64-text"
+        v-model="base64Image"
+      ></textarea>
+    </div>
+
     <div v-for="(photo, index) in photos" :key="index" class="test-section">
       <p>テスト {{ index + 1 }}:</p>
       
@@ -30,9 +45,74 @@ export default {
       photos: photoData,
       isModalOpen: false,
       currentImage: "",
+      selectedFile: null, // アップロードするファイル
+      base64Image: "", // APIからのBase64エンコード結果
     };
   },
   methods: {
+    // 画像ファイル選択時の処理
+    handleFileUpload(event) {
+      const files = event.target.files;
+      if (files && files.length > 0) {
+        this.selectedFile = files[0];
+      }
+    },
+
+    // 画像をAPIにアップロードしてBase64を取得
+    async uploadImage() {
+      if (!this.selectedFile) {
+        alert("ファイルを選択してください");
+        return;
+      }
+    // HEICファイルの判定と処理
+      if (this.selectedFile.name.toLowerCase().endsWith(".heic")) {
+        try {
+          const formData = new FormData();
+          formData.append("file", this.selectedFile);
+
+          // 無料のHEIC変換APIを利用
+          const heicResponse = await fetch("https://api.apyhub.com/convert/image/heic/jpeg-png/file", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!heicResponse.ok) {
+            throw new Error(`HEIC変換エラー: ${heicResponse.status}`);
+          }
+
+          // HEICから変換されたJPEGファイルを取得
+          const convertedBlob = await heicResponse.blob();
+          this.selectedFile = new File([convertedBlob], "converted.jpg", {
+            type: "image/jpeg",
+          });
+        } catch (error) {
+          console.error("HEIC変換エラー:", error);
+          alert("HEICファイルの変換に失敗しました。");
+          return;
+        }
+      }
+
+
+      try {
+        const formData = new FormData();
+        formData.append("file", this.selectedFile);
+
+        const response = await fetch("http://localhost:8080/api/images/process", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTPエラー: ${response.status}`);
+        }
+
+        const base64Text = await response.text();
+        this.base64Image = base64Text; // 結果を保存
+      } catch (error) {
+        console.error("画像アップロードエラー:", error);
+        alert("画像のアップロードに失敗しました。");
+      }
+    },
     showImage(imageUrl) {
       if (imageUrl) {
         this.currentImage = imageUrl;
