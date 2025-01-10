@@ -132,6 +132,7 @@ export default {
           const descriptionResponse = await api.post(`/recipes/${recipeId}/descriptions`, {
             description: description.text,
             sequence: i + 1,
+            photo: description.photos.length > 0 ? { binaryPhoto: description.photos[0] } : null, // 1枚目の写真を含める
           },
           {
             headers: {

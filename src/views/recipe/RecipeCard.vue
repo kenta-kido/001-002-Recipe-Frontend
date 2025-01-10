@@ -2,12 +2,14 @@
   <div
     class="border rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition duration-300"
   >
-    <img
-      v-if="photoUrl"
-      class="w-full h-48 object-cover"
-      :src="photoUrl"
-      alt="Recipe Image"
-    />
+    <div class="flex justify-center mb-6">
+      <img
+        v-if="photoUrl"
+        class="w-2/3 h-auto max-w-xl max-h-96 object-contain shadow-md"
+        :src="photoUrl"
+        alt="Recipe Image"
+      />
+    </div>
     <div class="p-4">
       <h2 class="text-lg font-bold mb-2">{{ recipe.title }}</h2>
       <p class="text-gray-500">Created by: {{ recipe.user.email }}</p>
