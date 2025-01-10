@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from "@/api/axios"; 
 
 export default {
   name: "StepCard",
@@ -40,8 +40,8 @@ export default {
     async fetchPhoto(descriptionId) {
       try {
         const recipeId = this.step.recipe.recipeId; // recipeオブジェクトからrecipeIdを取得
-        const response = await axios.get(
-                `http://localhost:8080/recipes/${recipeId}/descriptions/${descriptionId}/photo`,
+        const response = await api.get(
+          `/recipes/${recipeId}/descriptions/${descriptionId}/photo`,
           {
             responseType: "text", // Base64文字列をそのまま取得
           }

@@ -22,7 +22,6 @@
 <script>
 import StepList from "@/views/recipe/StepList.vue";
 import api from "@/api/axios";
-import axios from "axios";
 
 export default {
   name: "RecipeDetail",
@@ -39,7 +38,7 @@ export default {
       try {
         // バックエンドからのリクエストを実行
         const recipeId = this.$route.params.id;
-        const response = await axios.get(`http://localhost:8080/recipes/${recipeId}/photo`, {
+        const response = await api.get(`http://localhost:8080/recipes/${recipeId}/photo`, {
           responseType: 'text', // Base64文字列をそのまま取得する
         });
 
