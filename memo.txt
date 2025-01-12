@@ -7,3 +7,6 @@
 7. 画像なしのエラー解除
 8. 
 9. 
+
+
+deploy: git push heroku master

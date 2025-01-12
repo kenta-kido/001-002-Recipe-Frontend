@@ -44,7 +44,7 @@ export default {
     async fetchPhoto(recipeId) {
       try {
         // バックエンドからのリクエストを実行
-        const response = await api.get(`http://localhost:8080/recipes/${recipeId}/photo`, {
+        const response = await api.get(`/recipes/${recipeId}/photo`, {
           responseType: 'text', // Base64文字列をそのまま取得する
         });
 

@@ -38,7 +38,7 @@ export default {
       try {
         // バックエンドからのリクエストを実行
         const recipeId = this.$route.params.id;
-        const response = await api.get(`http://localhost:8080/recipes/${recipeId}/photo`, {
+        const response = await api.get(`/recipes/${recipeId}/photo`, {
           responseType: 'text', // Base64文字列をそのまま取得する
         });
 
