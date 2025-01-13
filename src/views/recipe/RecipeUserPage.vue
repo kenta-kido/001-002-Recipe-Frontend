@@ -42,12 +42,23 @@
 
           <!-- 手順ごとの写真 -->
           <div>
-            <label class="block font-medium">Step Photos:</label>
-            <div v-for="(photo, photoIndex) in description.photos" :key="photoIndex" class="space-y-2">
-              <input type="file" @change="onStepPhotoChange($event, index, photoIndex)" />
-              <button type="button" @click="removePhoto(index, photoIndex)" class="text-red-600">Remove Photo</button>
+            <label class="block font-medium">Step Photo:</label>
+            <div>
+              <input
+                type="file"
+                @change="onStepPhotoChange($event, index)"
+                :disabled="!!description.photo"
+                class="block mt-1"
+              />
+              <button
+                v-if="description.photo"
+                type="button"
+                @click="removePhoto(index)"
+                class="text-red-600 mt-2"
+              >
+                Remove Photo
+              </button>
             </div>
-            <button type="button" @click="addPhoto(index)" class="text-blue-600">Add Photo</button>
           </div>
 
           <button type="button" @click="removeDescription(index)" class="text-red-600">Remove Step</button>
@@ -72,22 +83,19 @@ export default {
         mainPhoto: null,
       },
       descriptions: [
-        { text: "", photos: [] },
+        { text: "", photo: null },
       ],
     };
   },
   methods: {
     addDescription() {
-      this.descriptions.push({ text: "", photos: [] });
+      this.descriptions.push({ text: "", photo: null });
     },
     removeDescription(index) {
       this.descriptions.splice(index, 1);
     },
-    addPhoto(descriptionIndex) {
-      this.descriptions[descriptionIndex].photos.push(null);
-    },
-    removePhoto(descriptionIndex, photoIndex) {
-      this.descriptions[descriptionIndex].photos.splice(photoIndex, 1);
+    removePhoto(descriptionIndex) {
+      this.descriptions[descriptionIndex].photo = null;
     },
     onMainPhotoChange(event) {
       const file = event.target.files[0];
@@ -99,12 +107,12 @@ export default {
         reader.readAsDataURL(file);
       }
     },
-    onStepPhotoChange(event, descriptionIndex, photoIndex) {
+    onStepPhotoChange(event, descriptionIndex) {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          this.descriptions[descriptionIndex].photos.splice(photoIndex, 1, e.target.result.split(",")[1]);
+          this.descriptions[descriptionIndex].photo = e.target.result.split(",")[1];
         };
         reader.readAsDataURL(file);
       }
@@ -120,8 +128,7 @@ export default {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
-        }
-        );
+        });
 
         const recipeId = recipeResponse.data.recipeId;
 
@@ -129,26 +136,16 @@ export default {
         for (let i = 0; i < this.descriptions.length; i++) {
           const description = this.descriptions[i];
 
-          const descriptionResponse = await api.post(`/recipes/${recipeId}/descriptions`, {
+          await api.post(`/recipes/${recipeId}/descriptions`, {
             description: description.text,
             sequence: i + 1,
-            photo: description.photos.length > 0 ? { binaryPhoto: description.photos[0] } : null, // 1枚目の写真を含める
+            photo: description.photo ? { binaryPhoto: description.photo } : null,
           },
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
             },
           });
-
-          const descriptionId = descriptionResponse.data.descriptionId;
-
-          for (let j = 0; j < description.photos.length; j++) {
-            const photo = description.photos[j];
-            await api.post(`/descriptions/${descriptionId}/photos`, {
-              binaryPhoto: photo,
-              sequence: j + 1,
-            });
-          }
         }
 
         alert("Recipe created successfully!");
