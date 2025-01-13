@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container mx-auto py-4">
     <h1>This is DashBoard</h1>
 
     <h2>User List</h2>

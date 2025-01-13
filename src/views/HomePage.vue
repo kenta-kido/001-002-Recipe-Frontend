@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto py-8">
+  <div class="container mx-auto py-4">
     <h1 class="text-3xl font-bold text-center mb-6">Recipe List</h1>
     <RecipeList :recipes="recipes" />
   </div>

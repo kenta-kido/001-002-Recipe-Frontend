@@ -1,14 +1,121 @@
 <template>
-  <header class="header">
-    <LogoComponent />
-    <nav>
-      <router-link v-if="isLoggedIn && userRole === 'ROLE_ADMIN'" to="/dashboard" style="cursor: pointer;">Dashboard</router-link>
-    </nav>
+  <header class="bg-white shadow-md fixed top-0 w-full z-50">
+    <div class="flex justify-between items-center px-4 py-3 max-w-7xl mx-auto">
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+        <LogoComponent />
+      </div>
 
-    <div class="user-info">
-      <button v-if="!isLoggedIn" class="login-button" @click="$router.push('/login')">Login</button>
-      <button v-else class="logout-button" @click="logout">Logout</button>
+
+      <!-- User Info & Mobile Menu Button -->
+      <div class="flex items-center space-x-4">
+        <button
+          v-if="!isLoggedIn"
+          class="text-red-400 hover:text-red-500 font-semibold"
+          @click="$router.push('/login')"
+        >
+          Login
+        </button>
+        <button
+          v-else
+          class="text-red-400 hover:text-red-500 font-semibold"
+          @click="logout"
+        >
+          Logout
+        </button>
+
+        <!-- Mobile Menu Button -->
+        <button class="md:hidden" @click="toggleMenu">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            class="w-6 h-6 text-gray-600"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+      </div>
     </div>
+
+    <!-- デスクトップ用 Dashboard -->
+      <nav class="hidden md:flex items-center justify-center space-x-4 bg-red-400 px-4 py-2 shadow-sm">
+        <router-link
+          to="/"
+          class="text-white hover:bg-red-500 px-3 py-2 rounded-md transition"
+          @click="toggleMenu"
+        >
+          Home
+        </router-link>
+        <router-link
+          v-if="isLoggedIn && userRole === 'ROLE_USER'"
+          to="/recipe"
+          class="text-white hover:bg-red-500 px-3 py-2 rounded-md transition"
+          @click="toggleMenu"
+        >
+          My Recipe
+        </router-link>
+        <router-link
+          v-if="isLoggedIn && userRole === 'ROLE_ADMIN'"
+          to="/dashboard"
+          class="text-white hover:bg-red-500 px-3 py-2 rounded-md transition"
+        >
+          Dashboard
+        </router-link>
+      </nav>
+    <!-- Mobile Navigation -->
+    <transition name="slide-fade">
+      <nav
+        v-if="isMenuOpen"
+        class="md:hidden bg-white shadow-md flex flex-col"
+      >
+        <router-link
+          to="/"
+          class="block bg-red-400 hover:bg-red-500 text-white font-semibold px-4 py-2 transition text-center"
+          @click="toggleMenu"
+        >
+          Home
+        </router-link>
+        <router-link
+          v-if="isLoggedIn && userRole === 'ROLE_USER'"
+          to="/recipe"
+          class="block bg-red-400 hover:bg-red-500 text-white font-semibold px-4 py-2 transition text-center"
+          @click="toggleMenu"
+        >
+          My Recipe
+        </router-link>
+        <router-link
+          v-if="isLoggedIn && userRole === 'ROLE_ADMIN'"
+          to="/dashboard"
+          class="block bg-red-400 hover:bg-red-500 text-white font-semibold px-4 py-2 transition text-center"
+          @click="toggleMenu"
+        >
+          Dashboard
+        </router-link>
+        <!--
+        <button
+          v-if="!isLoggedIn"
+          class="bg-red-400 hover:bg-red-500 text-white font-semibold px-4 py-2 transition"
+          @click="goToLogin"
+        >
+          Login
+        </button>
+        <button
+          v-else
+          class="bg-red-400 hover:bg-red-500 text-white font-semibold px-4 py-2 transition"
+          @click="logout"
+        >
+          Logout
+        </button>
+        -->
+      </nav>
+    </transition>
   </header>
 </template>
 
@@ -25,12 +132,11 @@ export default {
       isLoggedIn: false,
       userEmail: "",
       userRole: "",
+      isMenuOpen: false,
     };
   },
   mounted() {
-    this.isLoggedIn = !!localStorage.getItem("accessToken");
-    this.userEmail = localStorage.getItem("userEmail") || "";
-    this.userRole = localStorage.getItem("userRole") || "";
+    this.updateAuthStatus();
     window.addEventListener("authChanged", this.updateAuthStatus);
   },
   beforeUnmount() {
@@ -42,6 +148,7 @@ export default {
       localStorage.removeItem("userEmail");
       localStorage.removeItem("userRole");
       this.isLoggedIn = false;
+      this.isMenuOpen = false;
       window.dispatchEvent(new Event("authChanged"));
       this.$router.push("/");
     },
@@ -50,80 +157,25 @@ export default {
       this.userEmail = localStorage.getItem("userEmail") || "";
       this.userRole = localStorage.getItem("userRole") || "";
     },
+    toggleMenu() {
+      this.isMenuOpen = !this.isMenuOpen;
+    },
+    goToLogin() {
+      this.isMenuOpen = false;
+      this.$router.push("/login");
+    },
   },
 };
 </script>
 
 <style scoped>
-:root {
-  font-size: 18px; /* 全体的に文字を大きく設定 */
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: opacity 0.3s, transform 0.3s;
 }
-
-.header {
-  padding: clamp(0.5rem, 2vw, 1.5rem);
-  background-color: white;
-  color: black;
-  text-align: center;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-nav {
-  margin-top: auto;
-  display: flex;
-  gap: clamp(0.5rem, 1.5vw, 1rem);
-  align-items: center;
-}
-
-a {
-  color: black;
-  text-decoration: none;
-  font-size: clamp(1.125rem, 1.2vw, 1.5rem); /* 少し大きめのフォントサイズ */
-  font-weight: bold;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-/* ログインボタンのスタイル */
-.login-button {
-  background-color: #d63030;
-  color: white; /* ボタン上の文字を白に設定 */
-  border: none;
-  padding: 0.75rem 1.25rem; /* ボタンサイズを大きく */
-  font-size: clamp(1.125rem, 1.2vw, 1.5rem);
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.login-button:hover {
-  background-color: #b52a2a;
-}
-
-.logout-button {
-  background-color: #4caf50;
-  color: white; /* ボタン上の文字を白に設定 */
-  border: none;
-  padding: 0.75rem 1.25rem; /* ボタンサイズを大きく */
-  font-size: clamp(1.125rem, 1.2vw, 1.5rem);
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.logout-button:hover {
-  background-color: #45a049; 
-}
-
-/* 右端にユーザー情報を表示 */
-.user-info {
-  text-align: right;
-  font-size: clamp(1rem, 1.1vw, 1.25rem); /* ユーザー情報も大きめに設定 */
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 </style>
