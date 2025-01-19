@@ -61,12 +61,29 @@
         >
           My Recipe
         </router-link>
+
+        <router-link
+          v-if="isLoggedIn && userRole === 'ROLE_USER'"
+          to="/user/account"
+          class="text-white hover:bg-red-500 px-3 py-2 rounded-md transition"
+          @click="toggleMenu"
+        >
+          My Account
+        </router-link>
+
         <router-link
           v-if="isLoggedIn && userRole === 'ROLE_ADMIN'"
           to="/dashboard"
           class="text-white hover:bg-red-500 px-3 py-2 rounded-md transition"
         >
           Dashboard
+        </router-link>
+        <router-link
+          v-if="isLoggedIn && userRole === 'ROLE_ADMIN'"
+          to="/admin/recipe"
+          class="text-white hover:bg-red-500 px-3 py-2 rounded-md transition"
+        >
+          Recipe
         </router-link>
       </nav>
     <!-- Mobile Navigation -->
@@ -91,12 +108,28 @@
           My Recipe
         </router-link>
         <router-link
+          v-if="isLoggedIn && userRole === 'ROLE_USER'"
+          to="/user/account"
+          class="block bg-red-400 hover:bg-red-500 text-white font-semibold px-4 py-2 transition text-center"
+          @click="toggleMenu"
+        >
+          My Account
+        </router-link>
+        <router-link
           v-if="isLoggedIn && userRole === 'ROLE_ADMIN'"
           to="/dashboard"
           class="block bg-red-400 hover:bg-red-500 text-white font-semibold px-4 py-2 transition text-center"
           @click="toggleMenu"
         >
           Dashboard
+        </router-link>
+        <router-link
+          v-if="isLoggedIn && userRole === 'ROLE_ADMIN'"
+          to="/admin/recipe"
+          class="block bg-red-400 hover:bg-red-500 text-white font-semibold px-4 py-2 transition text-center"
+          @click="toggleMenu"
+        >
+          Recipe
         </router-link>
         <!--
         <button
