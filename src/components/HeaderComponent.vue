@@ -67,6 +67,13 @@
           Home
         </router-link>
         <router-link
+          to="/recipes/barcode"
+          class="text-white hover:bg-red-500 px-3 py-2 rounded-md transition"
+          @click="toggleMenu"
+        >
+          Barcode Scanner
+        </router-link>
+        <router-link
           v-if="isLoggedIn && userRole === 'ROLE_USER'"
           to="/recipe"
           class="text-white hover:bg-red-500 px-3 py-2 rounded-md transition"
@@ -112,6 +119,13 @@
         >
           Home
         </router-link>
+        <router-link
+          to="/recipes/barcode"
+          class="block bg-red-400 hover:bg-red-500 text-white font-semibold px-4 py-2 transition text-center"
+          @click="toggleMenu"
+        >
+          Barcode Scanner
+        </router-link>      
         <router-link
           v-if="isLoggedIn && userRole === 'ROLE_USER'"
           to="/recipe"

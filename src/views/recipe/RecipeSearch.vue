@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto py-8 px-4">
-    <h1 class="text-2xl font-semibold text-gray-800 mb-6">Search Results</h1>
+    <h1 class="text-2xl font-semibold text-gray-800 mb-6">Search Results for "{{ keyword }}" </h1>
     <div v-if="recipes.length === 0" class="text-gray-500">
       No recipes found for "{{ keyword }}".
     </div>
@@ -27,23 +27,27 @@ export default {
   components: {
     RecipeCard,
   },
+  props: {
+    keyword: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       recipes: [], // 検索結果のレシピ
-      keyword: "", // 検索キーワード
       renderKey: 0, // 再描画用のキー
     };
   },
-  async mounted() {
+ async mounted() {
     this.fetchRecipes();
   },
   watch: {
-    // クエリパラメータの変更を監視
-    "$route.query.keyword": "fetchRecipes",
+    // `keyword`の変更を監視
+    keyword: "fetchRecipes",
   },
   methods: {
     async fetchRecipes() {
-      this.keyword = this.$route.query.keyword || ""; // URLからキーワードを取得
       if (this.keyword) {
         // リストを一度空にして再レンダリング
         this.recipes = [];
