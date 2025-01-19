@@ -30,16 +30,32 @@ export default {
       type: Object,
       required: true,
     },
+    recipeId: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
       photoUrl: "",
     };
   },
-  methods: {
+methods: {
     async fetchPhoto(descriptionId) {
       try {
-        const recipeId = this.step.recipe.recipeId; // recipeオブジェクトからrecipeIdを取得
+        // `step` 全体をログに出力
+        console.log("Step object:", this.step);
+
+        // `recipeId` をログに出力
+        const recipeId = this.recipeId; // 安全なアクセス演算子を使用
+        console.log("Recipe ID:", recipeId);
+
+        if (!recipeId) {
+          console.error("Recipe ID is undefined. Check the `step` data.");
+          return;
+        }
+
+        // API リクエストを送信
         const response = await api.get(
           `/recipes/${recipeId}/descriptions/${descriptionId}/photo`,
           {
@@ -47,7 +63,9 @@ export default {
           }
         );
         this.photoUrl = response.data;
-        console.log("Fetched photo URL:", response.data); // 取得したURLを確認
+
+        // 取得したデータをログに出力
+        console.log("Fetched photo URL:", response.data);
       } catch (error) {
         console.error(
           "Error fetching photo for description ID:",

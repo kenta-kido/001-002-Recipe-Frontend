@@ -12,10 +12,10 @@
     </div>
     <div class="p-4">
       <h2 class="text-lg font-bold mb-2">{{ recipe.title }}</h2>
-      <p class="text-gray-500">Created by: {{ recipe.user.email }}</p>
+      <!-- <p class="text-gray-500">Created by: {{ recipe.user.email }}</p> -->
       <button
         class="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition"
-        @click="$router.push(`/recipes/${recipe.recipeId}`)"
+        @click="$router.push(`/recipe/${recipe.recipeId}`)"
       >
         View Details
       </button>

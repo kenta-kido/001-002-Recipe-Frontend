@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-4">
-    <StepCard v-for="step in steps" :key="step.descriptionId" :step="step" />
+    <StepCard v-for="step in steps" :key="step.descriptionId" :step="step"  :recipeId="recipeId" />
   </div>
 </template>
 
@@ -12,6 +12,10 @@ export default {
   props: {
     steps: {
       type: Array,
+      required: true,
+    },
+    recipeId: {
+      type: Number,
       required: true,
     },
   },
