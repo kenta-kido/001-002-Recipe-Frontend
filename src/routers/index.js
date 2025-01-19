@@ -11,6 +11,7 @@ import RecipeOverview from "../views/recipe/RecipeOverview.vue"; // 新規追加
 import RecipeUserPage from "../views/recipe/RecipeUserPage.vue"; // 新規追加
 import RecipeDetail from "../views/recipe/RecipeDetail.vue";
 import RecipeUserEdit from "../views/recipe/RecipeUserEdit.vue";
+import RecipeSearch from "../views/recipe/RecipeSearch.vue"; 
 
 import DashboardPage from "../views/DashboardPage.vue";
 import UserPage from "../views/UserPage.vue";
@@ -43,7 +44,7 @@ const routes = [
   { path: "/recipe/create", component: RecipeUserPage, meta: { requiresAuth: true, role: "ROLE_USER" } }, // 新しいルート
   { path: "/recipe/:id", component: RecipeDetail, props: true }, // 新規追加
   { path: "/recipe/edit/:id", component: RecipeUserEdit, props: true }, // 新規追加
-  
+  { path: "/recipes/search", component: RecipeSearch, props: (route) => ({ keyword: route.query.keyword }) },
 ];
 
 const router = createRouter({

@@ -24,6 +24,19 @@
           Logout
         </button>
 
+        <!-- Search Bar -->
+        <form
+          class="flex-grow mx-4"
+          @submit.prevent="searchRecipes"
+        >
+          <input
+            v-model="searchKeyword"
+            type="text"
+            placeholder="Search for recipes..."
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-red-300"
+          />
+        </form>
+
         <!-- Mobile Menu Button -->
         <button class="md:hidden" @click="toggleMenu">
           <svg
@@ -166,6 +179,7 @@ export default {
       userEmail: "",
       userRole: "",
       isMenuOpen: false,
+      searchKeyword: "",
     };
   },
   mounted() {
@@ -176,6 +190,15 @@ export default {
     window.removeEventListener("authChanged", this.updateAuthStatus);
   },
   methods: {
+    searchRecipes() {
+      // 検索結果ページへ遷移
+      if (this.searchKeyword.trim()) {
+        this.$router.push({
+          path: "/recipes/search",
+          query: { keyword: this.searchKeyword.trim() },
+        });
+      }
+    },
     logout() {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("userEmail");
