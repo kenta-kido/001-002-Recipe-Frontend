@@ -1,29 +1,53 @@
 <template>
-  <div>
-    <h2>Create New User</h2>
-    <form @submit.prevent="createUser">
-      <div>
-        <label for="email">Email:</label>
-        <input type="email" id="email" v-model="user.email" required />
+  <div class="container mx-auto py-6">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Create New User</h2>
+    <form @submit.prevent="createUser" class="bg-white p-6 rounded-lg shadow-lg space-y-4">
+      <div class="bg-gray-100 border border-gray-300 rounded-lg p-4">
+        <label for="email" class="block text-sm font-semibold text-gray-600 mb-2">Email</label>
+        <input
+          type="email"
+          id="email"
+          v-model="user.email"
+          required
+          class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        />
       </div>
-      <div>
-        <label for="extraInfoRaw">Extra Info:</label>
-        <input type="text" id="extraInfoRaw" v-model="user.extraInfoRaw" />
+
+      <div class="bg-gray-100 border border-gray-300 rounded-lg p-4">
+        <label for="extraInfoRaw" class="block text-sm font-semibold text-gray-600 mb-2">Extra Info</label>
+        <input
+          type="text"
+          id="extraInfoRaw"
+          v-model="user.extraInfoRaw"
+          class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        />
       </div>
-      <div>
-        <label for="role">Role:</label>
-        <select id="role" v-model="user.role" required>
+
+      <div class="bg-gray-100 border border-gray-300 rounded-lg p-4">
+        <label for="role" class="block text-sm font-semibold text-gray-600 mb-2">Role</label>
+        <select
+          id="role"
+          v-model="user.role"
+          required
+          class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        >
           <option value="ROLE_USER">User</option>
           <option value="ROLE_ADMIN">Admin</option>
         </select>
       </div>
-      <button type="submit">Done</button>
+
+      <button
+        type="submit"
+        class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600"
+      >
+        Done
+      </button>
     </form>
   </div>
 </template>
 
 <script>
-import api from "@/api/axios"; // ここでインポートします
+import api from "@/api/axios";
 
 export default {
   name: "DashBoardUserCreate",
@@ -31,10 +55,10 @@ export default {
     return {
       user: {
         email: "",
-        extraInfoRaw: "", // ユーザーが入力する情報
-        extraInfo: "", // 初期パスワードを含めて送信する情報
-        role: "ROLE_USER", // デフォルトで"User"が選択される
-        password: "", // 生成されたパスワードを格納
+        extraInfoRaw: "",
+        extraInfo: "",
+        role: "ROLE_USER",
+        password: "",
       },
     };
   },
@@ -42,7 +66,6 @@ export default {
     this.generatePassword();
   },
   methods: {
-    // ランダムな10文字のパスワードを生成する関数
     generatePassword() {
       const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       let password = "";
@@ -50,15 +73,12 @@ export default {
         password += chars.charAt(Math.floor(Math.random() * chars.length));
       }
       this.user.password = password;
-      // extraInfoに初期パスワード情報を含め、extraInfoRawも含める
       this.user.extraInfo = `[Init Pass: ${password}] ${this.user.extraInfoRaw}`;
     },
     async createUser() {
-      // extraInfoを更新して送信
       this.user.extraInfo = `[Init Pass: ${this.user.password}] ${this.user.extraInfoRaw}`;
-      
+
       try {
-        // 新しいユーザーを追加するAPIリクエスト
         await api.post("/admin/users", {
           email: this.user.email,
           extraInfo: this.user.extraInfo,
@@ -66,10 +86,9 @@ export default {
           password: this.user.password,
         }, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // トークンをヘッダーに追加
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
         });
-        // 成功したらダッシュボードへリダイレクト
         this.$router.push("/dashboard");
       } catch (error) {
         console.error("Error creating user:", error);
@@ -81,34 +100,5 @@ export default {
 </script>
 
 <style scoped>
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-label {
-  font-weight: bold;
-}
-
-input, select {
-  padding: 8px;
-  font-size: 1em;
-  width: 100%;
-}
-
-button {
-  padding: 10px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 1em;
-}
-
-button:hover {
-  background-color: #45a049;
-}
+/* TailwindCSS styling used; no additional scoped styles needed */
 </style>

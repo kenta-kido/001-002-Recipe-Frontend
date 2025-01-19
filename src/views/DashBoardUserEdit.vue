@@ -1,30 +1,55 @@
 <template>
-  <div>
-    <h2>Edit User</h2>
-    <form @submit.prevent="updateUser">
+  <div class="max-w-3xl mx-auto my-8 p-8 bg-gray-50 rounded-xl shadow-lg">
+    <h2 class="text-2xl font-bold text-gray-700 mb-6">Edit User</h2>
+    <form @submit.prevent="updateUser" class="space-y-6">
       <div>
-        <label for="email">Email:</label>
-        <input type="email" id="email" v-model="user.email" required />
+        <label for="email" class="block text-lg font-semibold text-gray-600 mb-2">Email</label>
+        <input
+          type="email"
+          id="email"
+          v-model="user.email"
+          required
+          class="block w-full px-4 py-3 ring-1 ring-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
+        />
       </div>
       <div>
-        <label for="extraInfoRaw">Extra Info:</label>
-        <input type="text" id="extraInfoRaw" v-model="user.extraInfoRaw" />
+        <label for="extraInfoRaw" class="block text-lg font-semibold text-gray-600 mb-2">Extra Info</label>
+        <input
+          type="text"
+          id="extraInfoRaw"
+          v-model="user.extraInfoRaw"
+          class="block w-full px-4 py-3 ring-1 ring-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
+        />
       </div>
-      <!-- 新しいパスワードを横に表示 -->
-      <div class="form-group" v-if="user.password">
-        <label for="newPassword">New Password: </label>
-        <span id="newPassword" class="new-password-display">{{ user.password }}</span>
-      </div>   
+      <div v-if="user.password">
+        <label for="newPassword" class="block text-lg font-semibold text-gray-600 mb-2">New Password</label>
+        <span id="newPassword" class="block px-4 py-2 bg-gray-100 ring-1 ring-gray-300 rounded-lg">{{ user.password }}</span>
+      </div>
       <div>
-        <label for="role">Role:</label>
-        <select id="role" v-model="user.role" required>
+        <label for="role" class="block text-lg font-semibold text-gray-600 mb-2">Role</label>
+        <select
+          id="role"
+          v-model="user.role"
+          required
+          class="block w-full px-4 py-3 ring-1 ring-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
+        >
           <option value="ROLE_USER">User</option>
           <option value="ROLE_ADMIN">Admin</option>
         </select>
       </div>
-      <button type="submit">Save Changes</button>
-      <!-- パスワード再設定ボタンはIDが1のユーザーには表示しない -->
-      <button type="button" v-if="userId !== 1" @click="resetPassword">Reset Password</button>
+      <div class="flex space-x-4">
+        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-md hover:shadow-lg">
+          Save Changes
+        </button>
+        <button
+          v-if="userId !== 1"
+          type="button"
+          @click="resetPassword"
+          class="px-6 py-3 bg-gray-500 text-white rounded-lg shadow-md hover:bg-gray-600 hover:shadow-lg"
+        >
+          Reset Password
+        </button>
+      </div>
     </form>
   </div>
 </template>
@@ -133,47 +158,3 @@ export default {
 };
 </script>
 
-<style scoped>
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-label {
-  font-weight: bold;
-}
-
-input, select {
-  padding: 8px;
-  font-size: 1em;
-  width: 100%;
-}
-
-button {
-  padding: 10px;
-  margin-top: 10px;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 1em;
-}
-
-button[type="submit"] {
-  background-color: #4CAF50;
-}
-
-button[type="button"] {
-  background-color: #f44336;
-}
-
-button[type="submit"]:hover {
-  background-color: #45a049;
-}
-
-button[type="button"]:hover {
-  background-color: #d32f2f;
-}
-</style>
