@@ -1,18 +1,27 @@
 <template>
   <div class="container mx-auto py-8 px-4">
-    <!-- Header Section -->
+    <!-- Header-Bereich -->
     <div class="text-center mb-8">
-      <h1 class="text-4xl font-extrabold text-gray-800 mb-2">Explore Delicious Recipes</h1>
+      <h1 class="text-4xl font-extrabold text-gray-800 mb-2">
+        Entdecke die Vielfalt der japanischen Küche!
+      </h1>
+      <p class="text-lg text-gray-600">
+        Lass dich von authentischen japanischen Rezepten inspirieren und bringe den Geschmack Japans auf deinen Tisch.
+      </p>
     </div>
-
+    <!-- Tags-Bereich -->
+    <div class="text-center mb-8">
+      <TagsArea />
+    </div>
+    <!-- Neueste Rezepte -->
     <div class="mb-12 bg-red-50 shadow-lg rounded-lg p-6">
-      <h2 class="text-2xl font-semibold text-gray-800 mb-6">Latest Recipes</h2>
+      <h2 class="text-2xl font-semibold text-gray-800 mb-6">Neueste Rezepte</h2>
       <div class="bg-gray-100 p-4 rounded-lg">
         <RecipeHorizontalScroll :recipes="recipesLatest" :scrollInterval="4000" :scrollAmount="400" />
       </div>
     </div>
 
-    <!-- Auto-Scrolling Recipe List -->
+    <!-- Automatisch scrollende Rezeptliste -->
     <div
       ref="scrollContainer"
       class="overflow-x-scroll whitespace-nowrap scroll-smooth relative"
@@ -25,6 +34,7 @@
 <script>
 import RecipeList from "@/views/recipe/RecipeList.vue";
 import RecipeHorizontalScroll from "@/views/recipe/RecipeHorizontalScroll.vue";
+import TagsArea from "@/components/TagsArea.vue";
 import api from "@/api/axios";
 
 export default {
@@ -73,6 +83,7 @@ export default {
   components: {
     RecipeList,
     RecipeHorizontalScroll, 
+    TagsArea,
   },
 };
 </script>

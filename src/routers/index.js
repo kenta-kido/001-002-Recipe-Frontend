@@ -13,6 +13,7 @@ import RecipeDetail from "../views/recipe/RecipeDetail.vue";
 import RecipeUserEdit from "../views/recipe/RecipeUserEdit.vue";
 import RecipeSearch from "../views/recipe/RecipeSearch.vue"; 
 import RecipeScannerPage from "../views/recipe/RecipeScannerPage.vue"; 
+import TagRecipesPage from "@/views/recipe/TagRecipesPage.vue"; 
 
 import DashboardPage from "../views/DashboardPage.vue";
 import UserPage from "../views/UserPage.vue";
@@ -47,6 +48,7 @@ const routes = [
   { path: "/recipe/edit/:id", component: RecipeUserEdit, props: true }, // 新規追加
   { path: "/recipes/search", component: RecipeSearch, props: (route) => ({ keyword: route.query.keyword }) },
   { path: "/recipes/barcode", component: RecipeScannerPage, props: (route) => ({ keyword: route.query.keyword }) },
+  { path: "/recipe/tags/:tagId/", component: TagRecipesPage, props: true },
 ];
 
 const router = createRouter({

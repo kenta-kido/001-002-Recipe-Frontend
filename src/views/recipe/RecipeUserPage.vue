@@ -40,6 +40,45 @@
         </select>
       </div>
 
+      <!-- Tags -->
+      <div>
+        <label for="tags" class="block font-medium text-gray-700 mb-2">Tags:</label>
+        <select
+          id="tags"
+          v-model="selectedTag"
+          class="block w-48 border border-red-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-400 focus:outline-none"
+        >
+          <option v-for="tag in tags" :key="tag.tagId" :value="tag">
+            {{ tag.name }}
+          </option>
+        </select>
+        <button
+          type="button"
+          @click="addTag"
+          class="ml-2 px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
+          :disabled="!selectedTag"
+        >
+          Add Tag
+        </button>
+        <!-- Selected Tags -->
+        <div class="mt-4 flex flex-wrap gap-2">
+          <div
+            v-for="tag in selectedTags"
+            :key="tag.tagId"
+            class="flex items-center space-x-2 px-3 py-1 bg-gray-200 text-gray-700 rounded-lg shadow-md"
+          >
+            <span>{{ tag.name }}</span>
+            <button
+              type="button"
+              @click="removeTag(tag)"
+              class="text-red-500 hover:underline"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- Ingredients Section -->
       <div>
         <h2 class="text-xl font-bold text-red-500 mb-2">Ingredients</h2>
@@ -164,12 +203,33 @@ export default {
       ingredients: [{ name: "", quantity: "", unit: null }],
       units: [],
       descriptions: [{ text: "", photo: null }],
+      tags: [], // タグ一覧
+      selectedTags: [], // 選択されたタグのリスト
+      selectedTag: null, // 現在選択されたタグ
     };
   },
   async mounted() {
     await this.fetchUnits();
+    await this.fetchTags();   
   },
   methods: {
+    async fetchTags() {
+      try {
+        const response = await api.get("/tags");
+        this.tags = response.data;
+      } catch (error) {
+        console.error("Failed to fetch tags:", error);
+      }
+    },
+    addTag() {
+      if (this.selectedTag && !this.selectedTags.includes(this.selectedTag)) {
+        this.selectedTags.push(this.selectedTag);
+      }
+      this.selectedTag = null; // 選択をリセット
+    },
+    removeTag(tag) {
+      this.selectedTags = this.selectedTags.filter((t) => t.tagId !== tag.tagId);
+    },
     async fetchUnits() {
       try {
         const response = await api.get("/units");
@@ -283,6 +343,19 @@ export default {
           }
         }
 
+        // タグを登録
+        for (const tag of this.selectedTags) {
+          await api.post(
+            `/recipes/${recipeId}/tags/${tag.tagId}`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+        }
+        
         // 手順を追加
         for (let i = 0; i < this.descriptions.length; i++) {
           const description = this.descriptions[i];

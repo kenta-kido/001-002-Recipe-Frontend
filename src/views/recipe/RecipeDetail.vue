@@ -1,26 +1,26 @@
 <template>
   <div v-if="recipe && recipe.user" class="max-w-4xl mx-auto py-8">
-    <!-- レシピタイトル -->
+    <!-- Rezept-Titel -->
     <h1 class="text-4xl font-extrabold text-center mb-6 text-red-500">{{ recipe.title }}</h1>
 
-    <!-- レシピ画像 -->
+    <!-- Rezept-Bild -->
     <div class="flex justify-center mb-6">
       <img
         v-if="photoUrl"
         class="max-w-full h-auto object-cover rounded-lg shadow-lg"
         :style="{ maxHeight: '300px', width: 'auto' }"
         :src="photoUrl"
-        alt="Recipe Image"
+        alt="Rezeptbild"
       />
     </div>
 
-    <!-- 材料リスト -->
+    <!-- Zutatenliste -->
     <div class="mb-6 bg-red-50 p-6 rounded-lg shadow-md">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-semibold text-gray-700">Ingredients</h2>
-        <!-- 人数選択プルダウン -->
+        <h2 class="text-2xl font-semibold text-gray-700">Zutaten</h2>
+        <!-- Portionen-Auswahl -->
         <div class="flex items-center">
-          <label for="servings" class="mr-2 text-gray-700">Servings:</label>
+          <label for="servings" class="mr-2 text-gray-700">Portionen:</label>
           <select
             id="servings"
             class="p-2 border border-gray-300 rounded-md"
@@ -45,14 +45,15 @@
       </ul>
     </div>
 
-    <!-- 手順リスト -->
+    <!-- Schritte-Liste -->
     <StepList v-if="steps.length > 0" :steps="steps" :recipeId="recipe.recipeId" />
   </div>
 
   <div v-else class="text-center py-8">
-    <p class="text-gray-500">Loading recipe details...</p>
+    <p class="text-gray-500">Lade Rezeptdetails...</p>
   </div>
 </template>
+
 
 <script>
 import StepList from "@/views/recipe/StepList.vue";

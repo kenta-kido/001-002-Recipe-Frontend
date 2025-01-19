@@ -1,6 +1,6 @@
 <template>
   <div class="border rounded-lg shadow-md p-4 bg-white flex items-center">
-    <!-- 画像部分 -->
+    <!-- Bildbereich -->
     <div
       class="flex-shrink-0 w-64 h-64 flex items-center justify-center bg-gray-100 mr-4"
     >
@@ -8,17 +8,18 @@
         v-if="photoUrl"
         class="h-auto max-w-full max-h-full object-contain"
         :src="photoUrl"
-        alt="Recipe Image"
+        alt="Rezeptbild"
       />
     </div>
 
-    <!-- テキスト部分 -->
+    <!-- Textbereich -->
     <div>
-      <h3 class="font-bold text-lg mb-2">Step {{ step.sequence }}</h3>
+      <h3 class="font-bold text-lg mb-2">Schritt {{ step.sequence }}</h3>
       <p class="text-gray-600">{{ step.description }}</p>
     </div>
   </div>
 </template>
+
 
 <script>
 import api from "@/api/axios"; 

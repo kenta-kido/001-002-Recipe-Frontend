@@ -1,8 +1,10 @@
 <template>
   <div class="container mx-auto py-8 px-4">
-    <h1 class="text-2xl font-semibold text-gray-800 mb-6">Search Results for "{{ keyword }}" </h1>
-    <div v-if="recipes.length === 0" class="text-gray-500">
-      No recipes found for "{{ keyword }}".
+    <h1 class="text-2xl font-semibold text-gray-800 mb-6">Suchergebnisse für "{{ keyword }}" </h1>
+    <!-- 検索結果が見つからなかった場合 -->
+    <div v-if="recipes.length === 0" class="text-gray-500 text-center">
+      Leider wurden keine Rezepte für "{{ keyword }}" gefunden. <br />
+      Versuchen Sie, ein anderes Stichwort einzugeben oder schauen Sie sich unsere empfohlenen Rezepte an.
     </div>
     <div
       v-else

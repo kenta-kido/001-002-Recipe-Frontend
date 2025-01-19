@@ -7,17 +7,17 @@
         v-if="photoUrl"
         class="w-2/3 h-auto max-w-xl max-h-96 object-contain shadow-md"
         :src="photoUrl"
-        alt="Recipe Image"
+        alt="Rezeptbild"
       />
     </div>
     <div class="p-4">
       <h2 class="text-lg font-bold mb-2">{{ recipe.title }}</h2>
-      <!-- <p class="text-gray-500">Created by: {{ recipe.user.email }}</p> -->
+      <!-- <p class="text-gray-500">Erstellt von: {{ recipe.user.email }}</p> -->
       <button
         class="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition"
         @click="$router.push(`/recipe/${recipe.recipeId}`)"
       >
-        View Details
+        Details ansehen
       </button>
     </div>
   </div>
