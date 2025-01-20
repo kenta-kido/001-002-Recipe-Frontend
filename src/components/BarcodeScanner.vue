@@ -66,7 +66,7 @@ export default {
 <style scoped>
 /* Style the scanner container */
 #scanner-container {
-  width: 500px; /* Set fixed width to match the video feed */
+  width: 100%;
   height: 300px; /* Set fixed height to match the video feed */
   position: relative;
 }
