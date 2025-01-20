@@ -92,9 +92,9 @@ export default {
 
         // ロールに基づいてリダイレクト先を変更
         if (userRole === "ROLE_ADMIN") {
-          this.$router.push("/admin");
+          this.$router.push("/");
         } else {
-          this.$router.push("/user");
+          this.$router.push("/");
         }
       } catch (error) {
         console.error("Login failed:", error);
