@@ -31,7 +31,7 @@ export default {
               width: 500,
               height: 300,
             },
-          }
+          },
           locator: {
             patchSize: "large",
             halfSample: true, // パフォーマンス向上のため半分のサイズで処理
