@@ -32,8 +32,17 @@ export default {
               height: 300,
             },
           },
+<<<<<<< HEAD
           decoder: {
             readers: ["ean_reader"],
+=======
+          locator: {
+            patchSize: "large",
+            halfSample: true, // パフォーマンス向上のため半分のサイズで処理
+          },
+          decoder: {
+            readers: ["ean_reader", "upc_reader", "code_128_reader", "ean_8_reader"], // 対応するバーコード形式
+>>>>>>> feature/scan/barcode-test
           },
         },
         (err) => {

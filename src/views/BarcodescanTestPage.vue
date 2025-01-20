@@ -46,8 +46,12 @@ export default {
             type: "LiveStream",
             target: document.querySelector("#scanner-container"), // Webカメラ映像を表示する場所
           },
+          locator: {
+            patchSize: "large",
+            halfSample: true, // パフォーマンス向上のため半分のサイズで処理
+          },
           decoder: {
-            readers: ["ean_reader"], // 対応するバーコード形式
+            readers: ["ean_reader", "upc_reader", "code_128_reader", "ean_8_reader"], // 対応するバーコード形式
           },
         },
         (err) => {
