@@ -22,20 +22,27 @@
 <script>
 import AdminRecipeTag from "@/views/admin/AdminRecipeTag.vue";
 import AdminRecipeUnit from "@/views/admin/AdminRecipeUnit.vue";
+import AdminRecipeSynonymTag from "@/views/admin/AdminRecipeSynonymTag.vue";
+import AdminRecipeSynonymIngredient from "@/views/admin/AdminRecipeSynonymIngredient.vue";
 
 export default {
   components: {
     AdminRecipeTag,
     AdminRecipeUnit,
+    AdminRecipeSynonymTag,
+    AdminRecipeSynonymIngredient,
   },
   data() {
     return {
-      tabs: ['tags', 'units'],
+      tabs: ['tags', 'units', 'synonymstag','synonymsingredient'], // 新しいタブを追加
       tabLabels: {
         tags: 'Manage Tags',
         units: 'Manage Units',
+        synonymstag: 'Manage Tag Synonyms', // タブ名を設定
+        synonymsingredient: 'Manage Ingredient Synonyms'
+
       },
-      currentSection: 'AdminRecipeTag',
+      currentSection: 'AdminRecipeTag', // 初期表示セクション
     };
   },
   methods: {
@@ -44,6 +51,10 @@ export default {
         this.currentSection = 'AdminRecipeTag';
       } else if (tab === 'units') {
         this.currentSection = 'AdminRecipeUnit';
+      } else if (tab === 'synonymstag') {
+        this.currentSection = 'AdminRecipeSynonymTag'; // 新しいタブに対応するセクション
+      } else if (tab === 'synonymsingredient') {
+        this.currentSection = 'AdminRecipeSynonymIngredient'; // 新しいタブに対応するセクション
       }
     },
   },
