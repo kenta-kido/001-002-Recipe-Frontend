@@ -381,7 +381,7 @@ export default {
         }
 
         alert("Recipe created successfully!");
-        this.$router.push("/user");
+        this.$router.push("/");
       } catch (error) {
         console.error("Error submitting recipe:", error);
 
