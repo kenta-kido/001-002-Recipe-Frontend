@@ -28,8 +28,8 @@ export default {
             type: "LiveStream",
             target: document.querySelector("#scanner-container"),
             constraints: {
-              width: 500,
-              height: 300,
+              width: { ideal: 1920 }, 
+              height: { ideal: 1080 },
             },
           },
           locator: {
