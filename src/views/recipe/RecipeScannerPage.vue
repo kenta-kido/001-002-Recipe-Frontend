@@ -6,7 +6,7 @@
     <p class="text-center text-gray-700 mb-6 max-w-lg">Mit unserem Barcodescanner können Sie die Zutaten ganz einfach identifizieren und passende Rezepte entdecken!</p>
 
     <!-- スキャナーコンポーネント -->
-    <div class="relative w-11/12 sm:w-96 h-72 mx-auto">
+    <div class="relative border-4 border-red-500 rounded-lg shadow-md w-11/12 sm:w-96 h-72 mx-auto overflow-hidden flex items-center justify-center">
       <div class="absolute left-1/2 top-0 transform -translate-x-1/2">
         <BarcodeScanner :key="scannerKey" @barcode-detected="handleBarcodeDetected" />
       </div>

@@ -1,7 +1,7 @@
 <template>
   <div
     id="scanner-container"
-    class="relative w-full h-full bg-gray-50 border-4 border-red-500 rounded-lg shadow-md overflow-hidden"
+    class="relative w-full h-full bg-gray-50 overflow-hidden"
   >
     <p v-if="!isScanning" class="absolute text-gray-500 text-center w-full">Camera Feed</p>
   </div>
