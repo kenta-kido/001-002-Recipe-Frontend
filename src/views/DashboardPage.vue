@@ -29,7 +29,7 @@
             <td class="px-6 py-4 text-sm text-gray-700">{{ user.extraInfo }}</td>
             <td class="px-6 py-4 text-sm">
               <button
-                v-if="user.id !== 1 && user.id !== 2"
+                v-if="user.id !== 1 && user.id !== 2 && user.id !== 3 && user.id !== 4"
                 @click="editUser(user.id)"
                 class="text-blue-600 hover:underline"
               >
