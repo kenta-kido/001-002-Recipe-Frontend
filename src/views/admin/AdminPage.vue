@@ -1,17 +1,17 @@
 <template>
   <div>
-    <h2>I am Admin</h2>
+    <h2>Ich bin Admin</h2>
 
-    <!-- 画面上にuserRoleを表示 -->
+    <!-- Display the userRole on the screen -->
     <p>User Role: {{ userRole }}</p>
 
     <div v-if="isAdmin">
-      <!-- 管理者専用のコンテンツをここに記述 -->
-      <p>Welcome to the admin dashboard!</p>
+      <!-- Admin-only content goes here -->
+      <p>Willkommen im Admin-Dashboard!</p>
     </div>
     <div v-else>
-      <h2>Access Denied</h2>
-      <p>You do not have permission to view this page.</p>
+      <h2>Zugriff verweigert</h2>
+      <p>Sie haben keine Berechtigung, diese Seite anzuzeigen.</p>
     </div>
   </div>
 </template>
@@ -20,16 +20,16 @@
 export default {
   data() {
     return {
-      isAdmin: false, // 初期状態では管理者でないと仮定
-      userRole: '',   // userRoleをデータに格納
+      isAdmin: false, // Assuming the user is not an admin by default
+      userRole: '',   // Store the userRole in data
     };
   },
   mounted() {
-    // コンポーネントがマウントされた時にlocalStorageからuserRoleを取得
+    // Fetch userRole from localStorage when the component is mounted
     const role = localStorage.getItem('userRole');
-    this.userRole = role; // 取得したuserRoleをデータに格納
+    this.userRole = role; // Store the fetched userRole in data
 
-    // 管理者の場合のみコンテンツを表示
+    // Only show content if the user is an admin
     if (role === 'ROLE_ADMIN') {
       this.isAdmin = true;
     }
@@ -38,5 +38,5 @@ export default {
 </script>
 
 <style scoped>
-/* スタイルを追加する場合 */
+/* Add styles if needed */
 </style>

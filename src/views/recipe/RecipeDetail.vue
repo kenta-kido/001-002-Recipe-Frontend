@@ -1,26 +1,26 @@
 <template>
   <div v-if="recipe && recipe.user" class="max-w-4xl mx-auto py-8">
-    <!-- Rezept-Titel -->
+    <!-- Recipe Title -->
     <h1 class="text-4xl font-extrabold text-center mb-6 text-red-500">{{ recipe.title }}</h1>
 
-    <!-- Rezept-Bild -->
+    <!-- Recipe Image -->
     <div class="flex justify-center mb-6">
       <img
         v-if="photoUrl"
         class="max-w-full h-auto object-cover rounded-lg shadow-lg"
         :style="{ maxHeight: '300px', width: 'auto' }"
         :src="photoUrl"
-        alt="Rezeptbild"
+        alt="Recipe Image"
       />
     </div>
 
-    <!-- Zutatenliste -->
+    <!-- Ingredient List -->
     <div class="mb-6 bg-red-50 p-6 rounded-lg shadow-md">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-semibold text-gray-700">Zutaten</h2>
-        <!-- Portionen-Auswahl -->
+        <h2 class="text-2xl font-semibold text-gray-700">Ingredients</h2>
+        <!-- Serving Selection -->
         <div class="flex items-center">
-          <label for="servings" class="mr-2 text-gray-700">Portionen:</label>
+          <label for="servings" class="mr-2 text-gray-700">Servings:</label>
           <select
             id="servings"
             class="p-2 border border-gray-300 rounded-md"
@@ -45,15 +45,14 @@
       </ul>
     </div>
 
-    <!-- Schritte-Liste -->
+    <!-- Step List -->
     <StepList v-if="steps.length > 0" :steps="steps" :recipeId="recipe.recipeId" />
   </div>
 
   <div v-else class="text-center py-8">
-    <p class="text-gray-500">Lade Rezeptdetails...</p>
+    <p class="text-gray-500">Loading recipe details...</p>
   </div>
 </template>
-
 
 <script>
 import StepList from "@/views/recipe/StepList.vue";
@@ -63,19 +62,19 @@ export default {
   name: "RecipeDetail",
   data() {
     return {
-      recipe: null, // レシピ詳細
-      steps: [], // 手順データ
-      ingredients: [], // 材料データ
-      photoUrl: "", // レシピ画像URL
-      selectedServings: 1, // 選択された人数
-      baseServings: 1, // 基本の人数（サーバーから取得）
+      recipe: null, // Recipe details
+      steps: [], // Steps data
+      ingredients: [], // Ingredients data
+      photoUrl: "", // Recipe image URL
+      selectedServings: 1, // Selected servings
+      baseServings: 1, // Base servings (fetched from server)
     };
   },
   methods: {
     async fetchPhoto(recipeId) {
       try {
         const response = await api.get(`/recipes/${recipeId}/photo`, {
-          responseType: "text", // Base64形式のデータを取得
+          responseType: "text", // Get data in Base64 format
         });
         this.photoUrl = response.data;
         console.log(`Generated Photo URL: ${this.photoUrl}`);
@@ -88,7 +87,7 @@ export default {
         const response = await api.get(`/recipes/${recipeId}/ingredients`);
         this.ingredients = response.data;
 
-        // サーバーから取得した材料の基本人数を設定（最初の要素のservingsを基準にする）
+        // Set the base servings (based on the first ingredient's servings)
         if (this.ingredients.length > 0) {
           this.baseServings = this.ingredients[0].servings;
           this.selectedServings = this.baseServings;
@@ -104,18 +103,18 @@ export default {
   async mounted() {
     const recipeId = this.$route.params.id;
     try {
-      // レシピ情報を取得
+      // Fetch recipe info
       const recipeResponse = await api.get(`/recipes/${recipeId}`);
       this.recipe = recipeResponse.data;
 
-      // 手順データを取得
+      // Fetch steps data
       const stepsResponse = await api.get(`/recipes/${recipeId}/descriptions`);
       this.steps = stepsResponse.data;
 
-      // 材料データを取得
+      // Fetch ingredients data
       await this.fetchIngredients(recipeId);
 
-      // レシピ画像を取得
+      // Fetch recipe image
       await this.fetchPhoto(recipeId);
     } catch (error) {
       console.error("Error fetching recipe details:", error);
@@ -128,7 +127,7 @@ export default {
 </script>
 
 <style scoped>
-/* スタイルをサイトデザインに合わせて調整 */
+/* Adjust styles to match the site design */
 h1 {
   font-family: "Poppins", sans-serif;
 }

@@ -2,9 +2,9 @@
   <div>
     <h2 class="text-xl font-bold text-gray-700 mb-2">Manage Tags</h2>
 
-    <!-- 表形式でタグを一覧表示 -->
+    <!-- List of tags displayed in a table format -->
 
-    <!-- 表形式でタグを一覧表示 -->
+    <!-- Display tags in a table -->
     <table class="min-w-full border-collapse border border-gray-300 bg-white shadow-md">
       <thead>
         <tr class="bg-gray-100">
@@ -75,7 +75,7 @@
       </tbody>
     </table>
 
-    <!-- 新しいタグを追加するフォーム -->
+    <!-- Form to add a new tag -->
     <div class="mt-4 p-4 bg-gray-50 border border-gray-300 rounded-lg">
       <h3 class="text-lg font-bold mb-2">Add New Tag</h3>
 
@@ -136,7 +136,7 @@ export default {
     };
   },
   computed: {
-    // 重複を排除したカテゴリのリスト
+    // List of unique categories, removing duplicates
     uniqueCategories() {
       return [...new Set(this.tags.map((tag) => tag.category))];
     },
@@ -182,39 +182,39 @@ export default {
         console.error("Failed to update tag:", error);
       }
     },
- async addTag() {
-  if (!this.newTag.name || (!this.newTag.category && !this.newCategory)) {
-    alert("Please provide a name and a category.");
-    return;
-  }
-
-  // 新しいカテゴリが入力されている場合、それを使用する
-  const categoryToUse = this.newCategory || this.newTag.category;
-
-  try {
-    const response = await api.post(
-      "/tags",
-      { name: this.newTag.name, category: categoryToUse },
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` },
+    async addTag() {
+      if (!this.newTag.name || (!this.newTag.category && !this.newCategory)) {
+        alert("Please provide a name and a category.");
+        return;
       }
-    );
 
-    // 新しいタグを初期化してリストに追加
-    this.tags.push({
-      ...response.data,
-      isEditing: false,
-      tempName: this.newTag.name,
-      tempCategory: categoryToUse,
-    });
+      // Use the new category if provided
+      const categoryToUse = this.newCategory || this.newTag.category;
 
-    // 入力欄をリセット
-    this.newTag = { name: "", category: "" };
-    this.newCategory = "";
-  } catch (error) {
-    console.error("Failed to add tag:", error);
-  }
-},
+      try {
+        const response = await api.post(
+          "/tags",
+          { name: this.newTag.name, category: categoryToUse },
+          {
+            headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` },
+          }
+        );
+
+        // Add the new tag to the list
+        this.tags.push({
+          ...response.data,
+          isEditing: false,
+          tempName: this.newTag.name,
+          tempCategory: categoryToUse,
+        });
+
+        // Reset the input fields
+        this.newTag = { name: "", category: "" };
+        this.newCategory = "";
+      } catch (error) {
+        console.error("Failed to add tag:", error);
+      }
+    },
     async deleteTag(tagId) {
       try {
         await api.delete(`/tags/${tagId}`, {
@@ -231,7 +231,7 @@ export default {
 
 <style scoped>
 table {
-  table-layout: fixed; /* 幅を固定 */
+  table-layout: fixed; /* Fixed width */
   width: 100%;
 }
 th, td {

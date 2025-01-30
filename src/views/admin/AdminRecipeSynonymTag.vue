@@ -1,15 +1,15 @@
 <template>
   <div class="container mx-auto py-8 px-4">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Tag Management</h1>
+    <h1 class="text-2xl font-bold mb-6">Tag Management</h1>
 
-    <!-- タグとシノニム一覧 -->
+    <!-- List of tags and synonyms -->
     <div v-if="tags.length > 0">
       <div
         v-for="tag in tags"
         :key="tag.tagId"
         class="mb-8 p-4 bg-white shadow-md rounded-lg"
       >
-        <!-- タグ名とカテゴリー -->
+        <!-- Tag name and category -->
         <div class="flex justify-between items-center">
           <h2 class="text-lg font-bold text-gray-700">
             {{ tag.name }} ({{ tag.category }})
@@ -23,7 +23,7 @@
           </button>
         </div>
 
-        <!-- シノニム一覧 -->
+        <!-- List of synonyms -->
         <div v-if="isSynonymsVisible(tag.tagId)" class="mt-4">
           <h3 class="text-sm font-semibold text-gray-600 mb-2">Synonyms:</h3>
           <ul class="mb-4 space-y-2">
@@ -42,7 +42,7 @@
             </li>
           </ul>
 
-          <!-- シノニム追加フォーム -->
+          <!-- Add synonym form -->
           <div>
             <input
               type="text"
@@ -71,23 +71,25 @@ import api from "@/api/axios";
 export default {
   data() {
     return {
-      tags: [], // タグとシノニムのデータ
-      newSynonyms: {}, // 新しいシノニムの入力
-      visibleSynonyms: new Set(), // 開いているタグIDを管理
+      tags: [], // Data for tags and synonyms
+      newSynonyms: {}, // Input for new synonyms
+      visibleSynonyms: new Set(), // Manage the visibility of synonyms for each tag
     };
   },
   async created() {
     await this.fetchTags();
   },
   methods: {
-    // タグとシノニムのデータを取得
+    // Fetch data for tags and synonyms
     async fetchTags() {
       try {
         const tagResponse = await api.get("/tags");
         const tags = tagResponse.data;
 
         for (const tag of tags) {
-          const synonymResponse = await api.get(`/tags/${tag.tagId}/synonyms`);
+          const synonymResponse = await api.get(
+            `/tags/${tag.tagId}/synonyms`
+          );
           tag.synonyms = synonymResponse.data;
         }
 
@@ -96,39 +98,44 @@ export default {
         console.error("Error fetching tags or synonyms:", error);
       }
     },
-    // シノニムを追加
+    // Add a synonym
     async addSynonym(tagId) {
       if (!this.newSynonyms[tagId]) return;
 
       try {
-        const synonymRequest = { synonym: this.newSynonyms[tagId] };
-        const response = await api.post(`/tags/${tagId}/synonyms`, synonymRequest);
+        const synonymRequest = { synonymName: this.newSynonyms[tagId] };
+        const response = await api.post(
+          `/tags/${tagId}/synonyms`,
+          synonymRequest
+        );
         const newSynonym = response.data;
 
-        // シノニムをタグに追加
+        // Add the synonym to the tag
         const tag = this.tags.find((t) => t.tagId === tagId);
         if (tag) tag.synonyms.push(newSynonym);
 
-        this.newSynonyms[tagId] = ""; // 入力欄をリセット
+        this.newSynonyms[tagId] = ""; // Reset the input field
       } catch (error) {
         console.error("Error adding synonym:", error);
       }
     },
-    // シノニムを削除
+    // Delete a synonym
     async deleteSynonym(synonymId, tagId) {
       try {
         await api.delete(`/tags/synonyms/${synonymId}`);
 
-        // シノニムを削除
+        // Remove the synonym from the tag
         const tag = this.tags.find((t) => t.tagId === tagId);
         if (tag) {
-          tag.synonyms = tag.synonyms.filter((s) => s.synonymId !== synonymId);
+          tag.synonyms = tag.synonyms.filter(
+            (syn) => syn.synonymId !== synonymId
+          );
         }
       } catch (error) {
         console.error("Error deleting synonym:", error);
       }
     },
-    // シノニムの表示切り替え
+    // Toggle the visibility of synonyms
     toggleSynonyms(tagId) {
       if (this.visibleSynonyms.has(tagId)) {
         this.visibleSynonyms.delete(tagId);
@@ -136,7 +143,7 @@ export default {
         this.visibleSynonyms.add(tagId);
       }
     },
-    // シノニムが表示されているか確認
+    // Check if synonyms are visible for a given tag
     isSynonymsVisible(tagId) {
       return this.visibleSynonyms.has(tagId);
     },

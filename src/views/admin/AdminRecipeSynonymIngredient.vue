@@ -1,15 +1,15 @@
 <template>
   <div class="container mx-auto py-8 px-4">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Ingredient Management</h1>
+    <h1 class="text-2xl font-bold mb-6">Ingredient Management</h1>
 
-    <!-- 材料とシノニム一覧 -->
+    <!-- List of ingredients and synonyms -->
     <div v-if="ingredients.length > 0">
       <div
         v-for="ingredient in ingredients"
         :key="ingredient.ingredientId"
         class="mb-8 p-4 bg-white shadow-md rounded-lg"
       >
-        <!-- 材料名 -->
+        <!-- Ingredient name -->
         <div class="flex justify-between items-center">
           <h2 class="text-lg font-bold text-gray-700">
             {{ ingredient.name }}
@@ -23,7 +23,7 @@
           </button>
         </div>
 
-        <!-- シノニム一覧 -->
+        <!-- List of synonyms -->
         <div v-if="isSynonymsVisible(ingredient.ingredientId)" class="mt-4">
           <h3 class="text-sm font-semibold text-gray-600 mb-2">Synonyms:</h3>
           <ul class="mb-4 space-y-2">
@@ -42,7 +42,7 @@
             </li>
           </ul>
 
-          <!-- シノニム追加フォーム -->
+          <!-- Add synonym form -->
           <div>
             <input
               type="text"
@@ -71,16 +71,16 @@ import api from "@/api/axios";
 export default {
   data() {
     return {
-      ingredients: [], // 材料とシノニムのデータ
-      newSynonyms: {}, // 新しいシノニムの入力
-      visibleSynonyms: new Set(), // 開いている材料IDを管理
+      ingredients: [], // Data for ingredients and synonyms
+      newSynonyms: {}, // New synonym input
+      visibleSynonyms: new Set(), // Track which ingredient IDs have visible synonyms
     };
   },
   async created() {
     await this.fetchIngredients();
   },
   methods: {
-    // 材料とシノニムのデータを取得
+    // Fetch data for ingredients and synonyms
     async fetchIngredients() {
       try {
         const ingredientResponse = await api.get("/ingredients");
@@ -98,7 +98,7 @@ export default {
         console.error("Error fetching ingredients or synonyms:", error);
       }
     },
-    // シノニムを追加
+    // Add a synonym
     async addSynonym(ingredientId) {
       if (!this.newSynonyms[ingredientId]) return;
 
@@ -110,23 +110,23 @@ export default {
         );
         const newSynonym = response.data;
 
-        // シノニムを材料に追加
+        // Add the synonym to the ingredient
         const ingredient = this.ingredients.find(
           (ing) => ing.ingredientId === ingredientId
         );
         if (ingredient) ingredient.synonyms.push(newSynonym);
 
-        this.newSynonyms[ingredientId] = ""; // 入力欄をリセット
+        this.newSynonyms[ingredientId] = ""; // Reset the input field
       } catch (error) {
         console.error("Error adding synonym:", error);
       }
     },
-    // シノニムを削除
+    // Delete a synonym
     async deleteSynonym(synonymId, ingredientId) {
       try {
         await api.delete(`/ingredients/synonyms/${synonymId}`);
 
-        // シノニムを削除
+        // Remove the synonym from the ingredient
         const ingredient = this.ingredients.find(
           (ing) => ing.ingredientId === ingredientId
         );
@@ -139,7 +139,7 @@ export default {
         console.error("Error deleting synonym:", error);
       }
     },
-    // シノニムの表示切り替え
+    // Toggle the visibility of synonyms
     toggleSynonyms(ingredientId) {
       if (this.visibleSynonyms.has(ingredientId)) {
         this.visibleSynonyms.delete(ingredientId);
@@ -147,7 +147,7 @@ export default {
         this.visibleSynonyms.add(ingredientId);
       }
     },
-    // シノニムが表示されているか確認
+    // Check if synonyms are visible for a given ingredient
     isSynonymsVisible(ingredientId) {
       return this.visibleSynonyms.has(ingredientId);
     },

@@ -2,7 +2,9 @@
   <div>
     <h2 class="text-xl font-bold text-gray-700 mb-2">Manage Units</h2>
 
-    <!-- 表形式で単位を一覧表示 -->
+    <!-- List units in a table format -->
+
+    <!-- Display units in a table -->
     <table class="min-w-full border-collapse border border-gray-300 bg-white shadow-md">
       <thead>
         <tr class="bg-gray-100">
@@ -61,7 +63,7 @@
       </tbody>
     </table>
 
-    <!-- 新しい単位を追加するフォーム -->
+    <!-- Form to add a new unit -->
     <div class="mt-4 p-4 bg-gray-50 border border-gray-300 rounded-lg">
       <h3 class="text-lg font-bold mb-2">Add New Unit</h3>
 
@@ -173,7 +175,7 @@ export default {
 
 <style scoped>
 table {
-  table-layout: fixed; /* 幅を固定 */
+  table-layout: fixed; /* Fixed width */
   width: 100%;
 }
 th, td {

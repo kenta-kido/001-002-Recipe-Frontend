@@ -2,7 +2,7 @@
   <div class="admin-page container mx-auto p-6">
     <h1 class="text-3xl font-bold mb-4 text-blue-500">Admin Recipe Management</h1>
 
-    <!-- タブメニュー -->
+    <!-- Tab menu -->
     <div class="flex border-b mb-4">
       <div
         v-for="tab in tabs"
@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    <!-- 動的に切り替わるコンポーネント -->
+    <!-- Dynamically switching components -->
     <component :is="currentSection" />
   </div>
 </template>
@@ -34,15 +34,15 @@ export default {
   },
   data() {
     return {
-      tabs: ['tags', 'units', 'synonymstag','synonymsingredient'], // 新しいタブを追加
+      tabs: ['tags', 'units', 'synonymstag','synonymsingredient'], // Adding new tabs
       tabLabels: {
         tags: 'Manage Tags',
         units: 'Manage Units',
-        synonymstag: 'Manage Tag Synonyms', // タブ名を設定
+        synonymstag: 'Manage Tag Synonyms', // Set tab name
         synonymsingredient: 'Manage Ingredient Synonyms'
 
       },
-      currentSection: 'AdminRecipeTag', // 初期表示セクション
+      currentSection: 'AdminRecipeTag', // Initial display section
     };
   },
   methods: {
@@ -52,9 +52,9 @@ export default {
       } else if (tab === 'units') {
         this.currentSection = 'AdminRecipeUnit';
       } else if (tab === 'synonymstag') {
-        this.currentSection = 'AdminRecipeSynonymTag'; // 新しいタブに対応するセクション
+        this.currentSection = 'AdminRecipeSynonymTag'; // Section for the new tab
       } else if (tab === 'synonymsingredient') {
-        this.currentSection = 'AdminRecipeSynonymIngredient'; // 新しいタブに対応するセクション
+        this.currentSection = 'AdminRecipeSynonymIngredient'; // Section for the new tab
       }
     },
   },
@@ -62,7 +62,7 @@ export default {
 </script>
 
 <style scoped>
-/* スタイルを調整して選択中のタブを強調 */
+/* Adjust styles to highlight the selected tab */
 .flex {
   display: flex;
 }
