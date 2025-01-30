@@ -1,12 +1,12 @@
 <template>
   <div class="relative overflow-hidden">
-    <!-- スクロールコンテナ -->
+    <!-- Scroll Container -->
     <div
       ref="scrollContainer"
       class="flex whitespace-nowrap scroll-smooth"
       :style="{ transform: `translateX(${positionX}px)` }"
     >
-      <!-- 複製されたレシピを順番に表示 -->
+      <!-- Display duplicated recipes in order -->
       <div
         v-for="(recipe, index) in loopedRecipes"
         :key="index"
@@ -30,31 +30,31 @@ export default {
     },
     scrollSpeed: {
       type: Number,
-      default: 1, // 自動スクロール速度（小さいほど遅い）
+      default: 1, // Auto scroll speed (smaller values result in slower scroll)
     },
   },
   data() {
     return {
-      positionX: 0, // 現在のスクロール位置
-      loopedRecipes: [], // ループ用に拡張されたレシピ配列
+      positionX: 0, // Current scroll position
+      loopedRecipes: [], // Looped recipes array
     };
   },
   watch: {
     recipes: {
-      immediate: true, // 初回のレンダリング時も反応する
+      immediate: true, // React on initial render
       handler(newRecipes) {
         if (newRecipes && newRecipes.length > 0) {
-          this.loopedRecipes = [...newRecipes, ...newRecipes]; // 配列を拡張
-          this.resetScroll(); // スクロール位置をリセット
+          this.loopedRecipes = [...newRecipes, ...newRecipes]; // Extend array for looping
+          this.resetScroll(); // Reset scroll position
         }
       },
     },
   },
   mounted() {
-    // レシピ配列を2倍に拡張
+    // Double the recipe array for looping
     this.loopedRecipes = [...this.recipes, ...this.recipes];
 
-    // 自動スクロール開始
+    // Start auto-scrolling
     this.startScrolling();
   },
   methods: {
@@ -62,24 +62,24 @@ export default {
       const container = this.$refs.scrollContainer;
 
       const scroll = () => {
-        this.positionX -= this.scrollSpeed; // 左にスクロール
+        this.positionX -= this.scrollSpeed; // Scroll to the left
         const containerWidth = container.scrollWidth / 2;
 
-        // コンテナ幅の半分以上スクロールしたらリセット
+        // Reset when scrolling has passed half the container width
         if (Math.abs(this.positionX) >= containerWidth) {
           this.positionX = 0;
         }
 
-        // 次のフレームでスクロールを更新
+        // Update scroll in the next frame
         requestAnimationFrame(scroll);
       };
 
       scroll();
     },
     resetScroll() {
-      cancelAnimationFrame(this.animationFrame); // アニメーションを停止
-      this.positionX = 0; // スクロール位置をリセット
-      this.startScrolling(); // スクロールを再開
+      cancelAnimationFrame(this.animationFrame); // Stop the animation
+      this.positionX = 0; // Reset the scroll position
+      this.startScrolling(); // Resume scrolling
     },
   },
   components: {
@@ -89,7 +89,7 @@ export default {
 </script>
 
 <style scoped>
-/* スクロールバーを非表示にする */
+/* Hide the scrollbar */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
