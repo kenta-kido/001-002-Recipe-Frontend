@@ -15,7 +15,7 @@ export default {
   emits: ["barcode-detected"],
   data() {
     return {
-      isScanning: false,
+      isScanning: false, // State variable to track whether scanning is active
     };
   },
   methods: {
@@ -25,44 +25,44 @@ export default {
       Quagga.init(
         {
           inputStream: {
-            type: "LiveStream",
-            target: document.querySelector("#scanner-container"),
+            type: "LiveStream",  // Live stream from the camera
+            target: document.querySelector("#scanner-container"),  // Target the container for the video feed
             constraints: {
-              width: { ideal: 1280 }, 
-              height: { ideal: 720 },
+              width: { ideal: 1280 },  // Ideal camera width
+              height: { ideal: 720 },  // Ideal camera height
             },
           },
           locator: {
-            patchSize: "large",
-            halfSample: true, // パフォーマンス向上のため半分のサイズで処理
+            patchSize: "large",  // Large patches for better detection
+            halfSample: true, // Process at half size for better performance
           },
           decoder: {
-            readers: ["ean_reader", "upc_reader", "code_128_reader", "ean_8_reader"], // 現在とマージ元の内容を統合
+            readers: ["ean_reader", "upc_reader", "code_128_reader", "ean_8_reader"], // Integrated barcode readers
           },
         },
         (err) => {
           if (err) {
             console.error("QuaggaJS initialization error:", err);
-            this.isScanning = false;
+            this.isScanning = false;  // Stop scanning on error
             return;
           }
-          Quagga.start();
+          Quagga.start();  // Start the scanner
         }
       );
 
       Quagga.onDetected((data) => {
-        const barcode = data.codeResult.code;
-        this.$emit("barcode-detected", barcode);
-        Quagga.stop();
-        this.isScanning = false;
+        const barcode = data.codeResult.code;  // Extract barcode data
+        this.$emit("barcode-detected", barcode);  // Emit the detected barcode
+        Quagga.stop();  // Stop scanning after a successful detection
+        this.isScanning = false;  // Update scanning status
       });
     },
   },
   mounted() {
-    this.startScanner();
+    this.startScanner();  // Start the scanner when the component is mounted
   },
   beforeUnmount() {
-    Quagga.stop();
+    Quagga.stop();  // Stop the scanner when the component is about to unmount
   },
 };
 </script>
