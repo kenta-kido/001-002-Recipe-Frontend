@@ -6,7 +6,6 @@
         <LogoComponent />
       </div>
 
-
       <!-- User Info & Mobile Menu Button -->
       <div class="flex items-center space-x-4">
         <button
@@ -57,7 +56,7 @@
       </div>
     </div>
 
-    <!-- デスクトップ用 Dashboard -->
+    <!-- Desktop Dashboard -->
       <nav class="hidden md:flex items-center justify-center space-x-4 bg-red-400 px-4 py-2 shadow-sm">
         <router-link
           to="/"
@@ -106,6 +105,7 @@
           Recipe
         </router-link>
       </nav>
+
     <!-- Mobile Navigation -->
     <transition name="slide-fade">
       <nav
@@ -189,23 +189,23 @@ export default {
   },
   data() {
     return {
-      isLoggedIn: false,
-      userEmail: "",
-      userRole: "",
-      isMenuOpen: false,
-      searchKeyword: "",
+      isLoggedIn: false,  // Tracks the login state
+      userEmail: "",  // Stores user email
+      userRole: "",  // Stores user role (e.g., 'USER', 'ADMIN')
+      isMenuOpen: false,  // Tracks whether the mobile menu is open
+      searchKeyword: "",  // Stores the search keyword entered by the user
     };
   },
   mounted() {
-    this.updateAuthStatus();
-    window.addEventListener("authChanged", this.updateAuthStatus);
+    this.updateAuthStatus();  // Update authentication status when component is mounted
+    window.addEventListener("authChanged", this.updateAuthStatus);  // Listen for authentication changes
   },
   beforeUnmount() {
-    window.removeEventListener("authChanged", this.updateAuthStatus);
+    window.removeEventListener("authChanged", this.updateAuthStatus);  // Remove event listener before unmount
   },
   methods: {
     searchRecipes() {
-      // 検索結果ページへ遷移
+      // Navigate to the search results page with the keyword
       if (this.searchKeyword.trim()) {
         this.$router.push({
           path: "/recipes/search",
@@ -214,23 +214,27 @@ export default {
       }
     },
     logout() {
+      // Log the user out by clearing localStorage and resetting state
       localStorage.removeItem("accessToken");
       localStorage.removeItem("userEmail");
       localStorage.removeItem("userRole");
       this.isLoggedIn = false;
       this.isMenuOpen = false;
-      window.dispatchEvent(new Event("authChanged"));
-      this.$router.push("/");
+      window.dispatchEvent(new Event("authChanged"));  // Dispatch event for auth change
+      this.$router.push("/");  // Redirect to home
     },
     updateAuthStatus() {
+      // Update login state based on localStorage
       this.isLoggedIn = !!localStorage.getItem("accessToken");
       this.userEmail = localStorage.getItem("userEmail") || "";
       this.userRole = localStorage.getItem("userRole") || "";
     },
     toggleMenu() {
+      // Toggle the mobile menu state
       this.isMenuOpen = !this.isMenuOpen;
     },
     goToLogin() {
+      // Navigate to the login page
       this.isMenuOpen = false;
       this.$router.push("/login");
     },
@@ -239,6 +243,7 @@ export default {
 </script>
 
 <style scoped>
+/* Transitions for the slide-fade effect */
 .slide-fade-enter-active,
 .slide-fade-leave-active {
   transition: opacity 0.3s, transform 0.3s;
