@@ -1,9 +1,9 @@
 <template>
   <div class="tags-area bg-red-50 rounded-lg p-6 shadow-md">
     <!-- German Title -->
-    <h2 class="text-2xl font-semibold mb-6 text-gray-900 text-center">Popular Keywords</h2>
+    <h2 class="text-2xl font-semibold mb-6 text-gray-900 text-center">Beliebte Schlüsselwörter</h2>
     <div v-if="Object.keys(groupedTags).length === 0" class="text-gray-500 text-center">
-      No tags available.
+      Keine Tags verfügbar.
     </div>
     <div v-else class="flex flex-wrap gap-6 justify-start">
       <!-- Section for each tag category -->
