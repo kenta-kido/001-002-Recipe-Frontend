@@ -38,7 +38,7 @@
             </td>
             <td class="px-6 py-4 text-sm">
               <button
-                v-if="user.id !== 1 && user.id !== 2"
+                v-if="user.id !== 1 && user.id !== 2 && user.id !== 3 && user.id !== 4""
                 @click="deleteUser(user.id)"
                 class="text-red-600 hover:underline"
               >
