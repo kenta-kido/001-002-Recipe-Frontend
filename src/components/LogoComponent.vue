@@ -3,7 +3,7 @@
     <img src="../assets/logo3.png" alt="Logo" class="logo" />
     <div class="logo-text-container">
       <p class="logo-text">MOGUMOGU</p>
-      <p class="logo-subtext">Japan auf deinem Tisch</p>
+      <p class="logo-subtext">Japan on your table</p>
     </div>
   </router-link>
 </template>
@@ -14,11 +14,11 @@ export default {
   props: {
     logoSrc: {
       type: String,
-      default: "@/assets/logo2.png", // デフォルトのロゴ画像パス
+      default: "@/assets/logo2.png", // Default logo image path
     },
     altText: {
       type: String,
-      default: "Logo", // デフォルトのaltテキスト
+      default: "Logo", // Default alt text
     },
   },
 };
@@ -30,37 +30,41 @@ export default {
   src: url('@/assets/fonts/Ounen-mouhitsu.otf') format('opentype');
 }
 
-
+/* Logo link style */
 .logo-link {
   display: flex;
   align-items: center;
-  text-decoration: none; /* リンクの下線を消す */
+  text-decoration: none; /* Remove underline from the link */
 }
 
+/* Logo image styling */
 .logo {
   height: clamp(5rem, 5vw, 10rem);
   width: auto;
-  margin-right: 10px; /* ロゴとテキストの間にスペースを追加 */
+  margin-right: 10px; /* Add space between logo and text */
 }
 
+/* Container for logo text (vertical arrangement) */
 .logo-text-container {
   display: flex;
-  flex-direction: column; /* テキストを縦に並べる */
+  flex-direction: column; /* Arrange text vertically */
 }
 
+/* Main logo text styling */
 .logo-text {
   font-family: 'OunenMouhitsu', sans-serif;
   font-size: clamp(1.5rem, 2vw, 2.5rem);
   font-weight: normal;
-  color: black; /* 必要に応じて色を設定 */
-  margin: 0; /* 上下の余白をリセット */
+  color: black; /* Set color for main logo text */
+  margin: 0; /* Remove vertical margin */
 }
 
+/* Subtext below the logo */
 .logo-subtext {
   font-family: 'OunenMouhitsu', sans-serif;
   font-size: clamp(0.75rem, 2vw, 1.5rem);
   font-weight: normal;
-  color: gray; /* サブテキストの色を薄く */
-  margin: 0; /* 上下の余白をリセット */
+  color: gray; /* Lighter color for subtext */
+  margin: 0; /* Remove vertical margin */
 }
 </style>

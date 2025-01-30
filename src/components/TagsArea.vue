@@ -1,12 +1,12 @@
 <template>
   <div class="tags-area bg-red-50 rounded-lg p-6 shadow-md">
-    <!-- ドイツ語タイトル -->
-    <h2 class="text-2xl font-semibold mb-6 text-gray-900 text-center">Beliebte Schlüsselwörter</h2>
+    <!-- German Title -->
+    <h2 class="text-2xl font-semibold mb-6 text-gray-900 text-center">Popular Keywords</h2>
     <div v-if="Object.keys(groupedTags).length === 0" class="text-gray-500 text-center">
-      Keine Tags verfügbar.
+      No tags available.
     </div>
     <div v-else class="flex flex-wrap gap-6 justify-start">
-      <!-- タグカテゴリーごとのセクション -->
+      <!-- Section for each tag category -->
       <div
         v-for="(tags, category) in groupedTags"
         :key="category"
@@ -35,28 +35,28 @@ export default {
   name: "TagArea",
   data() {
     return {
-      tags: [], // タグ一覧
-      groupedTags: {}, // カテゴリーごとにグループ化されたタグ
+      tags: [], // List of tags
+      groupedTags: {}, // Tags grouped by category
     };
   },
   async mounted() {
     await this.fetchTags();
   },
   methods: {
-    // タグ一覧を取得
+    // Fetch the list of tags
     async fetchTags() {
       try {
         const response = await api.get("/tags");
-        this.tags = response.data; // タグデータを取得
-        this.groupTagsByCategory(); // カテゴリーごとにグループ化
+        this.tags = response.data; // Get the tags data
+        this.groupTagsByCategory(); // Group tags by category
       } catch (error) {
         console.error("Error fetching tags:", error);
       }
     },
-    // タグをカテゴリーごとにグループ化
+    // Group tags by their category
     groupTagsByCategory() {
       this.groupedTags = this.tags.reduce((groups, tag) => {
-        const category = tag.category || "Unkategorisiert"; // ドイツ語: 未分類
+        const category = tag.category || "Uncategorized"; // Default to "Uncategorized" if no category is provided
         if (!groups[category]) {
           groups[category] = [];
         }
@@ -64,10 +64,10 @@ export default {
         return groups;
       }, {});
     },
-    // タグページにナビゲート
+    // Navigate to the tag page
     navigateToTag(tagId) {
       this.$router.push({
-        path: `/recipe/tags/${tagId}`, // TagIDを渡す
+        path: `/recipe/tags/${tagId}`, // Pass the tagId to the route
       });
     },
   },
@@ -76,7 +76,7 @@ export default {
 
 <style scoped>
 .category-card {
-  max-width: 300px; /* カードの最大幅を制限 */
+  max-width: 300px; /* Limit the maximum width of the card */
   text-align: center;
 }
 
