@@ -1,6 +1,6 @@
 <template>
   <div class="border rounded-lg shadow-md p-4 bg-white flex items-center">
-    <!-- 画像部分 -->
+    <!-- Image Section -->
     <div
       class="flex-shrink-0 w-64 h-64 flex flex-col items-center justify-center bg-gray-100 mr-4"
     >
@@ -23,7 +23,7 @@
       />
     </div>
 
-    <!-- テキスト部分 -->
+    <!-- Text Section -->
     <div>
       <h3 class="font-bold text-lg mb-2">Step {{ step.sequence }}</h3>
       <div v-if="isEditing">

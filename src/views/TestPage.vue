@@ -1,21 +1,21 @@
 <template>
   <div class="test">
-    <h1>テスト</h1>
+    <h1>Test</h1>
 
     <div v-for="(photo, index) in photos" :key="index" class="test-section">
-      <p>テスト {{ index + 1 }}:</p>
+      <p>Test {{ index + 1 }}:</p>
       
       <img
         :src="photo.binaryPhoto"
-        alt="テスト画像"
+        alt="Testbild"
         class="test-icon"
         @click="showImage(photo.binaryPhoto)"
       />
-      <p>説明ID: {{ photo.descriptionId }}</p>
+      <p>Beschreibung ID: {{ photo.descriptionId }}</p>
     </div>
 
     <div v-show="isModalOpen" class="modal" @click="closeModal">
-      <img :src="currentImage" alt="拡大画像" class="modal-image" @click.stop />
+      <img :src="currentImage" alt="Vergrößertes Bild" class="modal-image" @click.stop />
     </div>
   </div>
 </template>
@@ -66,35 +66,35 @@ export default {
   width: 300px;
   height: 300px;
   object-fit: cover;
-  cursor: pointer; /* クリックできるようにカーソルを変更 */
+  cursor: pointer; /* Change cursor to indicate clickability */
   margin: 20px 0;
   border-radius: 20%;
   border: 2px solid #333;
 }
 
-/* モーダルのスタイル */
+/* Modal styling */
 .modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.8); /* 背景の暗さ */
+  background-color: rgba(0, 0, 0, 0.8); /* Dark background */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* 他の要素より前面に表示 */
+  z-index: 1000; /* Ensure it appears in front of other elements */
 }
 
 .modal-image {
-  max-width: 90%; /* 画面の幅に収まるように調整 */
-  max-height: 90%; /* 画面の高さに収まるように調整 */
-  border: 2px solid white; /* 画像周囲の白い枠 */
-  border-radius: 10%; /* 画像の角を丸くする */
+  max-width: 90%; /* Adjust to fit within screen width */
+  max-height: 90%; /* Adjust to fit within screen height */
+  border: 2px solid white; /* White border around the image */
+  border-radius: 10%; /* Round corners of the image */
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .modal:hover {
-  cursor: pointer; /* 背景をクリック可能なことを示すカーソル */
+  cursor: pointer; /* Indicate the background is clickable */
 }
 </style>

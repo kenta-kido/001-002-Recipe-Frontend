@@ -16,19 +16,19 @@ export default {
   },
   data() {
     return {
-      headerHeight: 0, // ヘッダーの高さを保持
+      headerHeight: 0, // Speichert die Höhe des Headers
     };
   },
   mounted() {
-    this.updateHeaderHeight(); // 初期設定
-    window.addEventListener("resize", this.updateHeaderHeight); // ウィンドウリサイズ時に再計算
+    this.updateHeaderHeight(); // Initiale Einstellung
+    window.addEventListener("resize", this.updateHeaderHeight); // Neuberechnung bei Fenstergrößenänderung
   },
   beforeUnmount() {
-    window.removeEventListener("resize", this.updateHeaderHeight); // イベントリスナーを削除
+    window.removeEventListener("resize", this.updateHeaderHeight); // Entfernt den Event-Listener
   },
   methods: {
     updateHeaderHeight() {
-      // ヘッダーの高さを取得し、データに反映
+      // Holt die Höhe des Headers und speichert sie in der Datenvariable
       const headerElement = this.$refs.headerRef.$el;
       if (headerElement) {
         this.headerHeight = headerElement.offsetHeight;

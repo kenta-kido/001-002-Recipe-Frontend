@@ -8,7 +8,7 @@
       @updateStep="updateStep"
       @deleteStep="deleteStep"
     />
-    <!-- 手順追加ボタン -->
+    <!-- Add Step Button -->
     <button
       @click="addStep"
       class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600"
@@ -39,7 +39,7 @@ export default {
   methods: {
     addStep() {
       const newStep = {
-        descriptionId: Date.now(), // 仮のユニークID
+        descriptionId: Date.now(), // Temporary unique ID
         sequence: this.steps.length + 1,
         description: "",
       };

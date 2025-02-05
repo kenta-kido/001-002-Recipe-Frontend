@@ -1,9 +1,9 @@
 <template>
   <div class="max-w-3xl mx-auto my-8 p-8 bg-gray-50 rounded-xl shadow-lg">
-    <h2 class="text-2xl font-bold text-gray-700 mb-6">Edit User</h2>
+    <h2 class="text-2xl font-bold text-gray-700 mb-6">Benutzer bearbeiten</h2>
     <form @submit.prevent="updateUser" class="space-y-6">
       <div>
-        <label for="email" class="block text-lg font-semibold text-gray-600 mb-2">Email</label>
+        <label for="email" class="block text-lg font-semibold text-gray-600 mb-2">E-Mail</label>
         <input
           type="email"
           id="email"
@@ -13,7 +13,7 @@
         />
       </div>
       <div>
-        <label for="extraInfoRaw" class="block text-lg font-semibold text-gray-600 mb-2">Extra Info</label>
+        <label for="extraInfoRaw" class="block text-lg font-semibold text-gray-600 mb-2">Zusätzliche Informationen</label>
         <input
           type="text"
           id="extraInfoRaw"
@@ -22,24 +22,24 @@
         />
       </div>
       <div v-if="user.password">
-        <label for="newPassword" class="block text-lg font-semibold text-gray-600 mb-2">New Password</label>
+        <label for="newPassword" class="block text-lg font-semibold text-gray-600 mb-2">Neues Passwort</label>
         <span id="newPassword" class="block px-4 py-2 bg-gray-100 ring-1 ring-gray-300 rounded-lg">{{ user.password }}</span>
       </div>
       <div>
-        <label for="role" class="block text-lg font-semibold text-gray-600 mb-2">Role</label>
+        <label for="role" class="block text-lg font-semibold text-gray-600 mb-2">Rolle</label>
         <select
           id="role"
           v-model="user.role"
           required
           class="block w-full px-4 py-3 ring-1 ring-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
         >
-          <option value="ROLE_USER">User</option>
-          <option value="ROLE_ADMIN">Admin</option>
+          <option value="ROLE_USER">Benutzer</option>
+          <option value="ROLE_ADMIN">Administrator</option>
         </select>
       </div>
       <div class="flex space-x-4">
         <button type="submit" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-md hover:shadow-lg">
-          Save Changes
+          Änderungen speichern
         </button>
         <button
           v-if="userId !== 1"
@@ -47,7 +47,7 @@
           @click="resetPassword"
           class="px-6 py-3 bg-gray-500 text-white rounded-lg shadow-md hover:bg-gray-600 hover:shadow-lg"
         >
-          Reset Password
+          Passwort zurücksetzen
         </button>
       </div>
     </form>
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import api from "@/api/axios"; // ここでインポートします
+import api from "@/api/axios"; // Import here
 
 export default {
   name: "DashBoardUserEdit",
@@ -63,23 +63,23 @@ export default {
       return {
         user: {
           email: "",
-          extraInfoRaw: "", // ユーザーが記入する情報
-          extraInfo: "", // サーバーに送信する情報
+          extraInfoRaw: "", // User-entered information
+          extraInfo: "", // Information sent to the server
           role: "",
-          password: "", // 新しいパスワードを格納
+          password: "", // Stores new password
         },
-        originalPasswordInfo: "", // 元のパスワード情報を一時保存
+        originalPasswordInfo: "", // Temporarily store original password information
       };
     },
   mounted() {
-    this.userId = parseInt(this.$route.params.id, 10); // URLからユーザーIDを取得
+    this.userId = parseInt(this.$route.params.id, 10); // Get user ID from URL
     this.fetchUser();
   },
   methods: {
-    // ユーザー情報の取得
+    // Fetch user information
     async fetchUser() {
       try {
-        const userId = this.$route.params.id; // URLパラメータからユーザーIDを取得
+        const userId = this.$route.params.id; // Get user ID from URL parameters
         const response = await api.get(`/admin/users/${userId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -90,20 +90,20 @@ export default {
         this.user.extraInfoRaw = userData.extraInfo.replace(/\[Init Pass: \w{10}\]\s*/, '').replace(/\[Reset Pass: \w{10}\]\s*/, '');
         this.user.role = userData.role;
 
-        // ExtraInfo からパスワード情報を抽出し保存
+        // Extract password information from ExtraInfo
         const initPassMatch = userData.extraInfo.match(/\[Init Pass: (\w{10})\]/);
         const resetPassMatch = userData.extraInfo.match(/\[Reset Pass: (\w{10})\]/);
 
         this.originalPasswordInfo = resetPassMatch ? resetPassMatch[0] : initPassMatch ? initPassMatch[0] : "";
 
-        // パスワード表示用
+        // Display password
         this.user.password = resetPassMatch ? resetPassMatch[1] : initPassMatch ? initPassMatch[1] : "";
       } catch (error) {
         console.error("Error fetching user:", error);
-        alert("Failed to fetch user.");
+        alert("Benutzer konnte nicht geladen werden.");
       }
     },
-    // ランダムな10文字のパスワードを生成する関数
+    // Generate a random 10-character password
     generatePassword() {
       const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       let password = "";
@@ -112,23 +112,23 @@ export default {
       }
       return password;
     },
-    // パスワードリセット
+    // Reset password
     resetPassword() {
       const newPassword = this.generatePassword();
       this.originalPasswordInfo = '';
       this.user.password = newPassword;
     },
-    // ユーザー情報の更新
+    // Update user information
     async updateUser() {
       try {
-        // axios.put で送信するデータを直接構築
+        // Directly construct the data to be sent via axios.put
         const userId = this.$route.params.id;
         const edittedExtraInfo = `${this.originalPasswordInfo ? this.originalPasswordInfo : `[Reset Pass: ${this.user.password}]`} ${this.user.extraInfoRaw ? this.user.extraInfoRaw : ''}`.trim();
         const response = await api.put(
           `/admin/users/${userId}`,
           {
             email: this.user.email,
-            extraInfo: edittedExtraInfo, // 修正済みの extraInfo を送信
+            extraInfo: edittedExtraInfo, // Send the modified extraInfo
             role: this.user.role,
             password: this.user.password,
           },
@@ -139,22 +139,21 @@ export default {
           }
         );
 
-        console.log("Update Response:", response.data); // デバッグ用
-        this.$router.push("/dashboard"); // 成功時にダッシュボードへリダイレクト
+        console.log("Update Response:", response.data); // Debugging
+        this.$router.push("/dashboard"); // Redirect to dashboard on success
       } catch (error) {
         console.error("Error updating user:", error.response?.data || error.message);
 
         if (error.response?.status === 403) {
-          alert("You do not have permission to update this user.");
+          alert("Sie haben keine Berechtigung, diesen Benutzer zu aktualisieren.");
         } else if (error.response?.status === 401) {
-          alert("Session expired. Please log in again.");
+          alert("Sitzung abgelaufen. Bitte erneut anmelden.");
           this.$router.push("/login");
         } else {
-          alert("Failed to update user. Please check the console for more details.");
+          alert("Fehler beim Aktualisieren des Benutzers. Weitere Details in der Konsole.");
         }
       }
     },
   },
 };
 </script>
-
