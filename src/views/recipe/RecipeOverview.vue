@@ -72,6 +72,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import api from "@/api/axios";
 
@@ -82,7 +83,7 @@ export default {
       recipes: [],
       loading: true,
       currentPage: 1,
-      pageSize: 10, // 1ページあたりのアイテム数
+      pageSize: 10, // Number of items per page
     };
   },
   computed: {
@@ -111,7 +112,7 @@ export default {
       }
     },
     async deleteRecipe(id) {
-        console.log("Deleting recipe with ID:", id); // デバッグ用
+        console.log("Deleting recipe with ID:", id); // For debugging
         if (!id) {
             alert("Invalid recipe ID");
             return;
@@ -123,7 +124,7 @@ export default {
               Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             },
           });
-          // レシピを削除後にリストを更新
+          // Update the recipe list after deletion
           this.recipes = this.recipes.filter((recipe) => recipe.id !== id);
           alert("Recipe deleted successfully.");
         } catch (error) {

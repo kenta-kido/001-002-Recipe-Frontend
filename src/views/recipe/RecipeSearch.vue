@@ -1,10 +1,10 @@
 <template>
   <div class="container mx-auto py-8 px-4">
-    <h1 class="text-2xl font-semibold text-gray-800 mb-6">Suchergebnisse für "{{ keyword }}" </h1>
-    <!-- 検索結果が見つからなかった場合 -->
+    <h1 class="text-2xl font-semibold text-gray-800 mb-6">Search results for "{{ keyword }}" </h1>
+    <!-- If no search results are found -->
     <div v-if="recipes.length === 0" class="text-gray-500 text-center">
-      Leider wurden keine Rezepte für "{{ keyword }}" gefunden. <br />
-      Versuchen Sie, ein anderes Stichwort einzugeben oder schauen Sie sich unsere empfohlenen Rezepte an.
+      Unfortunately, no recipes were found for "{{ keyword }}". <br />
+      Try entering a different keyword or check out our recommended recipes.
     </div>
     <div
       v-else
@@ -37,35 +37,35 @@ export default {
   },
   data() {
     return {
-      recipes: [], // 検索結果のレシピ
-      renderKey: 0, // 再描画用のキー
+      recipes: [], // Search result recipes
+      renderKey: 0, // Key for re-rendering
     };
   },
  async mounted() {
     this.fetchRecipes();
   },
   watch: {
-    // `keyword`の変更を監視
+    // Watch for changes in `keyword`
     keyword: "fetchRecipes",
   },
   methods: {
     async fetchRecipes() {
       if (this.keyword) {
-        // リストを一度空にして再レンダリング
+        // Clear list and trigger re-rendering
         this.recipes = [];
-        this.renderKey++; // `key` を変更してリスト全体を再描画
+        this.renderKey++; // Change `key` to re-render the list
 
         try {
           const response = await api.get(`/recipes/search`, {
             params: { keyword: this.keyword },
           });
-          this.recipes = response.data; // 検索結果を設定
+          this.recipes = response.data; // Set search results
         } catch (error) {
           console.error("Error fetching search results:", error);
         }
       } else {
-        this.recipes = []; // キーワードが空の場合は結果をクリア
-        this.renderKey++; // 再描画用のキーを更新
+        this.recipes = []; // Clear results if keyword is empty
+        this.renderKey++; // Update re-render key
       }
     },
   },
@@ -73,5 +73,5 @@ export default {
 </script>
 
 <style scoped>
-/* 必要に応じてスタイルを追加 */
+/* Add styles as needed */
 </style>

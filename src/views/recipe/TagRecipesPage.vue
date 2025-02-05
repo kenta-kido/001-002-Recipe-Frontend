@@ -37,8 +37,8 @@ export default {
     };
   },
   async mounted() {
-    await this.fetchTagName(); // タグ名を取得
-    this.fetchRecipesByTag(); // レシピを取得
+    await this.fetchTagName(); // Retrieve tag name
+    this.fetchRecipesByTag(); // Fetch recipes
   },
   methods: {
     async fetchTagName() {
@@ -53,7 +53,7 @@ export default {
     async fetchRecipesByTag() {
       try {
         const response = await api.get(`/recipes/tag/${this.tagId}`);
-        this.recipes = response.data.map(tagRecipe => tagRecipe.recipe); // レシピのみ抽出
+        this.recipes = response.data.map(tagRecipe => tagRecipe.recipe); // Extract only recipes
       } catch (error) {
         console.error("Error fetching recipes for tag:", error);
       }

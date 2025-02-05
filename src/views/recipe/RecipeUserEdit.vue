@@ -1,6 +1,6 @@
 <template>
   <div v-if="recipe && recipe.user" class="max-w-4xl mx-auto py-8">
-    <!-- レシピタイトル -->
+    <!-- Recipe Title -->
     <div class="text-center mb-6">
       <input
         type="text"
@@ -10,7 +10,7 @@
       />
     </div>
 
-    <!-- レシピ画像 -->
+    <!-- Recipe Image -->
     <div class="flex justify-center items-center mb-6">
       <div class="relative">
         <img
@@ -44,7 +44,7 @@
       </div>
     </div>
 
-    <!-- 材料リスト -->
+    <!-- Ingredients List -->
     <div class="mb-6 bg-red-50 p-6 rounded-lg shadow-md">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-2xl font-semibold text-gray-700">Ingredients</h2>
@@ -89,7 +89,7 @@
       </button>
     </div>
 
-    <!-- 手順リスト -->
+    <!-- Steps List -->
     <div class="mb-6">
       <h2 class="text-2xl font-semibold text-gray-700 mb-4">Steps</h2>
       <StepListEdit :steps="steps" :recipeId="recipe.recipeId" />
@@ -109,10 +109,10 @@ export default {
   name: "RecipeUserEdit",
   data() {
     return {
-      recipe: null, // レシピ詳細
-      steps: [], // 手順データ
-      ingredients: [], // 材料データ
-      photoUrl: "", // レシピ画像URL
+      recipe: null, // Recipe details
+      steps: [], // Step data
+      ingredients: [], // Ingredient data
+      photoUrl: "", // Recipe image URL
     };
   },
   methods: {

@@ -1,27 +1,27 @@
 <template>
   <div class="barcode-scanner">
-    <h1>バーコードスキャナー</h1>
+    <h1>Barcode-Scanner</h1>
 
-    <!-- Webカメラ映像を表示 -->
+    <!-- Display webcam stream -->
     <div id="scanner-container"></div>
-    <button @click="startScanner" class="start-button">スキャン開始</button>
+    <button @click="startScanner" class="start-button">Scan starten</button>
 
-    <!-- スキャンされたバーコードを表示 -->
-    <p v-if="scannedBarcode">バーコード: {{ scannedBarcode }}</p>
+    <!-- Display scanned barcode -->
+    <p v-if="scannedBarcode">Barcode: {{ scannedBarcode }}</p>
 
-    <!-- 製品情報表示 -->
+    <!-- Display product information -->
     <div v-if="productInfo" class="product-info">
-      <h2>{{ productInfo.product_name || "製品名不明" }}</h2>
+      <h2>{{ productInfo.product_name || "Unbekanntes Produkt" }}</h2>
       <img
         v-if="productInfo.image_url"
         :src="productInfo.image_url"
-        alt="製品画像"
+        alt="Produktbild"
         class="product-image"
       />
-      <p>バーコード: {{ productInfo.code }}</p>
-      <p>ブランド: {{ productInfo.brands || "不明" }}</p>
-      <p>カテゴリ: {{ productInfo.categories || "不明" }}</p>
-      <p>成分: {{ productInfo.ingredients_text || "不明" }}</p>
+      <p>Barcode: {{ productInfo.code }}</p>
+      <p>Marke: {{ productInfo.brands || "Unbekannt" }}</p>
+      <p>Kategorie: {{ productInfo.categories || "Unbekannt" }}</p>
+      <p>Zutaten: {{ productInfo.ingredients_text || "Unbekannt" }}</p>
     </div>
   </div>
 </template>
@@ -33,48 +33,48 @@ export default {
   name: "BarcodescanTestPage",
   data() {
     return {
-      scannedBarcode: null, // スキャンされたバーコード
-      productInfo: null, // 製品情報
+      scannedBarcode: null, // Scanned barcode
+      productInfo: null, // Product information
     };
   },
   methods: {
-    // スキャナーを開始
+    // Start scanner
     startScanner() {
       Quagga.init(
         {
           inputStream: {
             type: "LiveStream",
-            target: document.querySelector("#scanner-container"), // Webカメラ映像を表示する場所
+            target: document.querySelector("#scanner-container"), // Where to display webcam stream
           },
           locator: {
             patchSize: "large",
-            halfSample: true, // パフォーマンス向上のため半分のサイズで処理
+            halfSample: true, // Process at half size for better performance
           },
           decoder: {
-            readers: ["ean_reader", "upc_reader", "code_128_reader", "ean_8_reader"], // 対応するバーコード形式
+            readers: ["ean_reader", "upc_reader", "code_128_reader", "ean_8_reader"], // Supported barcode formats
           },
         },
         (err) => {
           if (err) {
-            console.error("QuaggaJS初期化エラー:", err);
+            console.error("QuaggaJS Initialization Error:", err);
             return;
           }
           Quagga.start();
         }
       );
 
-      // バーコード検出イベント
+      // Barcode detection event
       Quagga.onDetected(async (data) => {
-        this.scannedBarcode = data.codeResult.code; // バーコードを取得
-        Quagga.stop(); // スキャナー停止
-        await this.fetchProductInfo(); // 製品情報を取得
+        this.scannedBarcode = data.codeResult.code; // Retrieve barcode
+        Quagga.stop(); // Stop scanner
+        await this.fetchProductInfo(); // Fetch product information
       });
     },
 
-    // 製品情報を取得
+    // Fetch product information
     async fetchProductInfo() {
       if (!this.scannedBarcode) {
-        alert("バーコードをスキャンしてください");
+        alert("Bitte scannen Sie zuerst einen Barcode.");
         return;
       }
       try {
@@ -83,19 +83,20 @@ export default {
         );
         const data = await response.json();
         if (data.status === 1) {
-          this.productInfo = data.product; // 製品情報を保存
+          this.productInfo = data.product; // Save product information
         } else {
-          alert("製品が見つかりませんでした。別のバーコードを試してください。");
-          this.productInfo = null; // エラー時はデータをクリア
+          alert("Produkt nicht gefunden. Bitte versuchen Sie einen anderen Barcode.");
+          this.productInfo = null; // Clear data on error
         }
       } catch (error) {
-        console.error("APIエラー:", error);
-        alert("データ取得に失敗しました。");
+        console.error("API-Fehler:", error);
+        alert("Fehler beim Abrufen der Daten.");
       }
     },
   },
 };
 </script>
+
 <style scoped>
 #scanner-container {
   width: 100%;

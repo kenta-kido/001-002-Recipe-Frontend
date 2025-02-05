@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto py-8 px-4">
-    <!-- Header-Bereich -->
+    <!-- Header Section -->
     <div class="text-center mb-8">
       <h1 class="text-4xl font-extrabold text-gray-800 mb-2">
         Entdecke die Vielfalt der japanischen Küche!
@@ -9,11 +9,11 @@
         Lass dich von authentischen japanischen Rezepten inspirieren und bringe den Geschmack Japans auf deinen Tisch.
       </p>
     </div>
-    <!-- Tags-Bereich -->
+    <!-- Tags Section -->
     <div class="text-center mb-8">
       <TagsArea />
     </div>
-    <!-- Neueste Rezepte -->
+    <!-- Latest Recipes -->
     <div class="mb-12 bg-red-50 shadow-lg rounded-lg p-6">
       <h2 class="text-2xl font-semibold text-gray-800 mb-6">Neueste Rezepte</h2>
       <div class="bg-gray-100 p-4 rounded-lg">
@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <!-- Automatisch scrollende Rezeptliste -->
+    <!-- Auto-scrolling Recipe List -->
     <div
       ref="scrollContainer"
       class="overflow-x-scroll whitespace-nowrap scroll-smooth relative"
@@ -53,7 +53,7 @@ export default {
       } else {
         console.warn("No recipes found.");
       }
-      // 最新のレシピデータを取得
+      // Fetch latest recipe data
       const latestResponse = await api.get("/recipes/latest");
       if (latestResponse.data && latestResponse.data.length > 0) {
         this.recipesLatest = latestResponse.data;

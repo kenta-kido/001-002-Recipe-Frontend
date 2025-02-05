@@ -17,7 +17,3 @@ export default {
   name: "UserPage",
 };
 </script>
-
-<style scoped>
-/* 必要に応じて追加のカスタムスタイルを記述 */
-</style>

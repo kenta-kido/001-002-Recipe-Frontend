@@ -1,6 +1,6 @@
 <template>
   <div class="border rounded-lg shadow-md p-4 bg-white flex items-center">
-    <!-- Bildbereich -->
+    <!-- Image Section -->
     <div
       class="flex-shrink-0 w-64 h-64 flex items-center justify-center bg-gray-100 mr-4"
     >
@@ -8,18 +8,17 @@
         v-if="photoUrl"
         class="h-auto max-w-full max-h-full object-contain"
         :src="photoUrl"
-        alt="Rezeptbild"
+        alt="Recipe Image"
       />
     </div>
 
-    <!-- Textbereich -->
+    <!-- Text Section -->
     <div>
       <h3 class="font-bold text-lg mb-2">Schritt {{ step.sequence }}</h3>
       <p class="text-gray-600">{{ step.description }}</p>
     </div>
   </div>
 </template>
-
 
 <script>
 import api from "@/api/axios"; 
@@ -44,11 +43,11 @@ export default {
 methods: {
     async fetchPhoto(descriptionId) {
       try {
-        // `step` 全体をログに出力
+        // Log the entire `step` object
         console.log("Step object:", this.step);
 
-        // `recipeId` をログに出力
-        const recipeId = this.recipeId; // 安全なアクセス演算子を使用
+        // Log the `recipeId`
+        const recipeId = this.recipeId; // Use safe access operator
         console.log("Recipe ID:", recipeId);
 
         if (!recipeId) {
@@ -56,16 +55,16 @@ methods: {
           return;
         }
 
-        // API リクエストを送信
+        // Send API request
         const response = await api.get(
           `/recipes/${recipeId}/descriptions/${descriptionId}/photo`,
           {
-            responseType: "text", // Base64文字列をそのまま取得
+            responseType: "text", // Get Base64 string as is
           }
         );
         this.photoUrl = response.data;
 
-        // 取得したデータをログに出力
+        // Log the fetched data
         console.log("Fetched photo URL:", response.data);
       } catch (error) {
         console.error(
